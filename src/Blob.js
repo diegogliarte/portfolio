@@ -30,6 +30,14 @@ class Blob  {
         return null
     }
 
+    isFile() {
+        return this.type === "file"
+    }
+
+    isFolder() {
+        return this.type === "folder"
+    }
+
 }
 
 export default Blob

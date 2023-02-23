@@ -10,7 +10,9 @@ class Commands {
         "history": Commands.triggerHistory,
         "ls": Commands.triggerList,
         "cd": Commands.triggerChangeDir,
-        "mkdir": Commands.triggerMakeDir
+        "mkdir": Commands.triggerMakeDir,
+        "touch": Commands.triggerTouch,
+        "projects": Commands.triggerProjects
     }
 
     static history = []
@@ -133,6 +135,11 @@ class Commands {
                 `cd: ${args[0]}: No such file or directory`
             ]
         }
+        if (Directory.currentDirectory.getSubDirectory(args[0]).isFile()) {
+            return [
+                `cd: ${args[0]}: Not a directory`
+            ]
+        }
         Directory.changeDir(args[0])
         return [
         ]
@@ -147,6 +154,44 @@ class Commands {
         Directory.makeDir(args)
         return [
 
+        ]
+    }
+
+    static triggerTouch(stdin, setStdin, stdout, setStdout, args) {
+        if (args.length === 0) {
+            return [
+                "touch: missing file operand"
+            ]
+        }
+        Directory.makeFile(args)
+        return [
+
+        ]
+    }
+
+    static triggerProjects(stdin, setStdin, stdout, setStdout, args) {
+        return [
+            "Most of my projects can be found on my <a target='_blank' href='https://github.com/diegogliarte'>" +
+            "GitHub</a>. Some of the most interesting ones are:",
+            "",
+            "<a target='_blank' href='https://github.com/diegogliarte/portfolio'>Terminal Portfolio</a>",
+            "The website you are browsing right now!",
+            "Tech >> React, JS, CSS, HTML, Unix",
+            "",
+            "<a target='_blank' href='https://github.com/diegogliarte/p5js-projects'>Sudoku Recognizer</a>",
+            "Interprets a video stream to detect a sudoku, build it, and solve it using backtracking",
+            "Tech >> Python, OpenCV, Machine Learning, Computer Vision",
+            "",
+            "<a target='_blank' href='https://github.com/diegogliarte/p5js-projects'>Various Mini Games</a>",
+            "Made in the span of two weeks because I was bored an wanted to see if I would be able to code them " +
+            "without any reference. Snake, Tic Tac Toe, Minesweeper, Flappy Birds... You name it!",
+            "Tech >> p5js, JS, CSS, HTML",
+            "",
+            "<a target='_blank' href='https://github.com/diegogliarte/terminal-sorting-visualizer'>Terminal Sorting Visualizer</a>",
+            "Visualizer for the most common sorting algorithms such as Quicksort, Bubblesort, Selectionsort, among " +
+            "some weird ones like Bongosort or Stalinsort (yeah, you heard right). Used ANSI escape codes to " +
+            "optimize performance",
+            "Tech >> Python, ANSI escape codes",
         ]
     }
 

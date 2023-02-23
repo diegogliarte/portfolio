@@ -58,7 +58,13 @@ class Directory {
             const folder = new Blob(name, this.currentDirectory, "folder")
             this.currentDirectory.addBlob(folder)
         }
+    }
 
+    static makeFile(names) {
+        for (let name of names) {
+            const file = new Blob(name, this.currentDirectory, "file")
+            this.currentDirectory.addBlob(file)
+        }
     }
 
     static getPrompt() {
@@ -68,7 +74,6 @@ class Directory {
     static updatePrompt() {
         this.prompt = this.currentDirectory.prompt
     }
-
 
 
 }

@@ -32,3 +32,8 @@
 span {
     white-space: break-spaces;
 }
+
+a {
+    text-decoration: none;
+    color: var(--color-blue);
+}
