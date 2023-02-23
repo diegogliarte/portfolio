@@ -19,12 +19,18 @@ function Terminal() {
 
         } else if (key === "Enter") {
             Commands.handleCommands(stdin, setStdin, stdout, setStdout)
+
+        } else if (key === "ArrowUp") {
+            setStdin(Commands.getHistory(-1))
+        } else if (key === "ArrowDown") {
+            setStdin(Commands.getHistory(1))
         }
     }
 
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
         return () => {
+            console.log(stdout)
             document.removeEventListener("keydown", handleKeyPress);
         };
     }, [stdin, stdout]);
@@ -34,7 +40,7 @@ function Terminal() {
             {stdout.map((line) => (
                 <Line key={line.id} stdout={line.stdout} hasPrompt={line.hasPrompt} />
             ))}
-            <Line stdout={stdin} hasPrompt={true}/>
+            <Line stdout={stdin} hasPrompt={true} current={true}/>
         </div>
     );
 }

@@ -6,3 +6,17 @@
     color: var(--color-blue);
 
 }
+
+.cursor {
+    color: var(--color-white)
+}
+
+.empty-span {
+    font-size: 0;
+    line-height: 0;
+    visibility: hidden;
+}
+
+.empty-span:empty {
+    visibility: visible;
+}
