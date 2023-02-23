@@ -13,11 +13,11 @@ function Line(props) {
 
     return (
         <div className="line">
-            {props.hasPrompt &&
+            {props.prompt !== null &&
                 <span className="prompt">
                     <span className="user">diegogliarte@ubuntu</span>
                     <span>:</span>
-                    <span className="tilde">~</span>
+                    <span className="tilde">{props.prompt}</span>
                     <span>$ </span>
                 </span>
             }

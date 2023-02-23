@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Line from "./Line";
 import "./Terminal.css";
 import Commands from "./Commands";
+import Directory from "./Directory";
 
 function Terminal() {
     const [stdin, setStdin] = useState("")
@@ -10,7 +11,7 @@ function Terminal() {
 
 
     function handleKeyPress(event) {
-        const key = event.key;
+        let key = event.key;
         if (/^[a-zA-Z0-9!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~ ]$/.test(key)) {
             setStdin(prevStdin => prevStdin + key)
 
@@ -30,7 +31,6 @@ function Terminal() {
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
         return () => {
-            console.log(stdout)
             document.removeEventListener("keydown", handleKeyPress);
         };
     }, [stdin, stdout]);
@@ -38,9 +38,9 @@ function Terminal() {
     return (
         <div className="terminal">
             {stdout.map((line) => (
-                <Line key={line.id} stdout={line.stdout} hasPrompt={line.hasPrompt} />
+                <Line key={line.id} stdout={line.stdout} prompt={line.prompt} />
             ))}
-            <Line stdout={stdin} hasPrompt={true} current={true}/>
+            <Line stdout={stdin} current={true} prompt={Directory.getPrompt()}/>
         </div>
     );
 }

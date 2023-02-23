@@ -20,3 +20,15 @@
 .empty-span:empty {
     visibility: visible;
 }
+
+.file {
+    color: var(--color-white);
+}
+
+.folder {
+    color: var(--color-blue);
+}
+
+span {
+    white-space:pre;
+}

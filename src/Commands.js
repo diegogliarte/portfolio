@@ -1,3 +1,5 @@
+import Directory from "./Directory";
+
 class Commands {
 
     static commands = {
@@ -6,6 +8,9 @@ class Commands {
         "skills": Commands.triggerSkillsCommand,
         "whoami": Commands.triggerWhoAmICommand,
         "history": Commands.triggerHistory,
+        "ls": Commands.triggerList,
+        "cd": Commands.triggerChangeDir,
+        "mkdir": Commands.triggerMakeDir
     }
 
     static history = []
@@ -20,18 +25,21 @@ class Commands {
     }
 
     static handleCommands(stdin, setStdin, stdout, setStdout) {
-        let command = stdin.trim()
-        if (command !== "") {
-            this.history.push(command)
+        let splitted = stdin.split(" ")
+        let command = splitted[0]
+        let args = splitted.slice(1)
+
+        if (stdin !== "") {
+            this.history.push(stdin)
         }
 
         let output = []
         if (Commands.isCommand(command)) {
-            output = this.commands[command](stdin, setStdin, stdout, setStdout)
+            output = this.commands[command](stdin, setStdin, stdout, setStdout, args)
         } else if (command !== "") {
-            output = Commands.handleCommandNotFound(stdin, stdout, setStdout)
+            output = Commands.handleCommandNotFound(stdin, stdout, setStdout, args)
         } else {
-            output = Commands.handleEmptyCommand(stdin, stdout, setStdout)
+            output = Commands.handleEmptyCommand(stdin, stdout, setStdout, args)
         }
 
         Commands.historyIndex = Commands.history.length
@@ -39,13 +47,13 @@ class Commands {
         setStdin("");
     }
 
-    static handleCommandNotFound(stdin, stdout, setStdout) {
+    static handleCommandNotFound(stdin, stdout, setStdout, args) {
         return [
             `${stdin}: command not found`
         ]
     }
 
-    static handleEmptyCommand(stdin, stdout, setStdout) {
+    static handleEmptyCommand(stdin, stdout, setStdout, args) {
         return []
     }
 
@@ -57,7 +65,7 @@ class Commands {
         return command in this.commands
     }
 
-    static triggerHelpCommand(stdin, setStdin, stdout, setStdout) {
+    static triggerHelpCommand(stdin, setStdin, stdout, setStdout, args) {
         const COMMANDS_MESSAGE = Object.keys(Commands.commands).join(" ")
         return ["GNU bash, version 0.42",
             "These shell commands are defined internally. Type 'help' to see this list.",
@@ -65,12 +73,12 @@ class Commands {
         ]
     }
 
-    static triggerClearCommand(stdin, setStdin, stdout, setStdout) {
+    static triggerClearCommand(stdin, setStdin, stdout, setStdout, args) {
         setStdout([])
         return null
     }
 
-    static triggerSkillsCommand(stdin, setStdin, stdout, setStdout) {
+    static triggerSkillsCommand(stdin, setStdin, stdout, setStdout, args) {
         return ["Languages: Python, JavaScript, bash, Java, SQL, C/C++",
             "Python Tech: OpenCV, numpy, Flask, FastAPI",
             "Website Tech: HTML, CSS, VanillaJS, React",
@@ -78,7 +86,7 @@ class Commands {
         ]
     }
 
-    static triggerWhoAmICommand(stdin, setStdin, stdout, setStdout) {
+    static triggerWhoAmICommand(stdin, setStdin, stdout, setStdout, args) {
         return ["diegogliarte",
             "",
             "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with +1 " +
@@ -88,11 +96,57 @@ class Commands {
         ]
     }
 
-    static triggerHistory(stdin, setStdin, stdout, setStdout) {
+    static triggerHistory(stdin, setStdin, stdout, setStdout, args) {
         return [
             ...Commands.history.map((command,i) => {
                 return `${i + 1} ${command}`
             })
+        ]
+    }
+
+    static triggerList(stdin, setStdin, stdout, setStdout, args) {
+        if (Directory.currentDirectory.subDirectories.length === 0) {
+            return []
+        }
+
+        return [
+            Directory.currentDirectory.subDirectories.map(subDirectory => {
+                return `<span class=${subDirectory.type}>${subDirectory.name}</span>`
+            }).join("  ")
+        ]
+    }
+
+    static triggerChangeDir(stdin, setStdin, stdout, setStdout, args) {
+        if (args.length > 1) {
+            return [
+                "cd: too many arguments"
+            ]
+        }
+        if (args.length === 0) {
+            Directory.changeDir("/")
+            return [
+
+            ]
+        }
+        if (!Directory.currentDirectory.getSubDirectory(args[0])) {
+            return [
+                `cd: ${args[0]}: No such file or directory`
+            ]
+        }
+        Directory.changeDir(args[0])
+        return [
+        ]
+    }
+
+    static triggerMakeDir(stdin, setStdin, stdout, setStdout, args) {
+        if (args.length === 0) {
+            return [
+                "mkdir: missing operand"
+            ]
+        }
+        Directory.makeDir(args)
+        return [
+
         ]
     }
 
@@ -102,15 +156,16 @@ class Commands {
         }
         setStdout([
             ...stdout,
-            {id: stdout.length, stdout: stdin, hasPrompt: true},
+            {id: stdout.length, stdout: stdin, prompt: Directory.getPrompt()},
             ...output.map((line, i) => {
                 return ({
                     id: stdout.length + i + 1,
                     stdout: line,
-                    hasPrompt: false
+                    prompt: null
                 });
             }),
         ]);
+        Directory.updatePrompt()
     }
 
 
