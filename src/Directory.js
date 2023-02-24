@@ -3,42 +3,6 @@ import Blob from "./Blob";
 
 class Directory {
 
-    static directory = {
-        "root": {
-            "name": "~",
-            "type": "folder",
-            "subDirectories": [
-                {
-                    "name": "folder1",
-                    "type": "folder",
-                    "subDirectories": [
-                        {
-                            "name": "folder11",
-                            "type": "folder",
-                            "subDirectories": {}
-                        },
-                        {
-                            "name": "file11",
-                            "type": "file",
-                            "content": "this is a inner file"
-                        }
-                    ]
-                },
-                {
-                    "name": "folder2",
-                    "type": "folder",
-                    "subDirectories": {}
-                },
-                {
-                    "name": "file1",
-                    "type": "file",
-                    "content": "this is a file"
-                }
-            ]
-        }
-    }
-
-
     static currentDirectory = new Blob("~", null, "folder")
     static prompt = Directory.currentDirectory.prompt
 

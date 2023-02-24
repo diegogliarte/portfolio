@@ -14,8 +14,42 @@ class Commands {
         "touch": Commands.triggerTouch,
         "projects": Commands.triggerProjects,
         "work": Commands.triggerWork,
-        "cv": Commands.triggerCV
+        "cv": Commands.triggerCV,
+        "contact": Commands.triggerContact,
     }
+
+    static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
+        let {command, args} = this.parseStdin(stdin);
+        let commandsAutocomplete = []
+        if (args.length === 0) {
+            commandsAutocomplete = Object.keys(Commands.commands).filter(command => {
+                return stdin === command.slice(0, stdin.length)
+            })
+
+        }
+        let output = null
+
+        if (commandsAutocomplete.length === 1) {
+            setStdin(commandsAutocomplete[0])
+        } else if (commandsAutocomplete.length > 0) {
+            output = [commandsAutocomplete.join("  ")]
+        }
+
+        Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
+    }
+
+    static combos = {
+        "17,67": Commands.triggerCancel
+    }
+
+    static isCombo(rawStdin) {
+
+    }
+
+    static handleCombos(rawStdin, stdin, setStdin, stdout, setStdout) {
+
+    }
+
 
     static history = []
     static historyIndex = 0
@@ -29,9 +63,7 @@ class Commands {
     }
 
     static handleCommands(stdin, setStdin, stdout, setStdout) {
-        let splitted = stdin.split(" ")
-        let command = splitted[0]
-        let args = splitted.slice(1)
+        let {command, args} = this.parseStdin(stdin);
 
         if (stdin !== "") {
             this.history.push(stdin)
@@ -46,9 +78,26 @@ class Commands {
             output = Commands.handleEmptyCommand(stdin, stdout, setStdout, args)
         }
 
-        Commands.historyIndex = Commands.history.length
+        setStdin("")
         Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
-        setStdin("");
+    }
+
+    static parseStdin(stdin) {
+        let splitted = stdin.trim().split(" ")
+        let command = splitted[0].trim()
+        let args = splitted.slice(1)
+            .map(arg => {
+                return arg.trim()
+            })
+            .filter(arg => {
+                return arg !== ""
+            })
+        return {command, args};
+    }
+
+    static handleCombos(stdin, setStdin, stdout, setStdout) {
+        let output = this.triggerCancel(stdin, setStdin, stdout, setStdout)
+        Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
     }
 
     static handleCommandNotFound(stdin, stdout, setStdout, args) {
@@ -219,10 +268,25 @@ class Commands {
         ]
     }
 
+    static triggerContact(stdin, setStdin, stdout, setStdout, args) {
+        return [
+            "<a href='mailto:diegogliarte@gmail.com'>diegogliarte@gmail.com</a>",
+            "<a target='_blank' href='https://www.linkedin.com/in/diegogliarte/'>LinkedIn</a>",
+            "<a target='_blank' href='https://github.com/diegogliarte/'>GitHub</a>",
+        ]
+    }
+
+    static triggerCancel(stdin, setStdin, stdout, setStdout, args) {
+        return []
+    }
+
     static executeCommand(stdin, setStdin, stdout, setStdout, output) {
+        Commands.historyIndex = Commands.history.length
+
         if (output === null) {
             return
         }
+
         setStdout([
             ...stdout,
             {id: stdout.length, stdout: stdin, prompt: Directory.getPrompt()},
