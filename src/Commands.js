@@ -12,7 +12,9 @@ class Commands {
         "cd": Commands.triggerChangeDir,
         "mkdir": Commands.triggerMakeDir,
         "touch": Commands.triggerTouch,
-        "projects": Commands.triggerProjects
+        "projects": Commands.triggerProjects,
+        "work": Commands.triggerWork,
+        "cv": Commands.triggerCV
     }
 
     static history = []
@@ -192,6 +194,28 @@ class Commands {
             "some weird ones like Bongosort or Stalinsort (yeah, you heard right). Used ANSI escape codes to " +
             "optimize performance",
             "Tech >> Python, ANSI escape codes",
+        ]
+    }
+
+    static triggerWork(stdin, setStdin, stdout, setStdout, args) {
+        return [
+            "Oct 2021 - Present",
+            "Software Developer, Perspectiv",
+            "",
+            "Type 'cv' to download my full CV"
+        ]
+    }
+
+    static triggerCV(stdin, setStdin, stdout, setStdout, args) {
+        const fileUrl = "/files/CV.pdf";
+        const downloadLink = document.createElement("a");
+        downloadLink.href = fileUrl;
+        downloadLink.download = "CV";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        return [
+
         ]
     }
 
