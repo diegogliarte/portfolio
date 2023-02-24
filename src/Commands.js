@@ -1,41 +1,93 @@
 import Directory from "./Directory";
+import {logDOM} from "@testing-library/react";
 
 class Commands {
 
     static commands = {
-        "help": Commands.triggerHelpCommand,
-        "clear": Commands.triggerClearCommand,
-        "skills": Commands.triggerSkillsCommand,
-        "whoami": Commands.triggerWhoAmICommand,
-        "history": Commands.triggerHistory,
-        "ls": Commands.triggerList,
-        "cd": Commands.triggerChangeDir,
-        "mkdir": Commands.triggerMakeDir,
-        "touch": Commands.triggerTouch,
-        "projects": Commands.triggerProjects,
-        "work": Commands.triggerWork,
-        "cv": Commands.triggerCV,
-        "contact": Commands.triggerContact,
+        "help": {
+            "trigger": Commands.triggerHelpCommand
+        },
+        "clear": {
+            "trigger": Commands.triggerClearCommand
+        },
+        "skills": {
+            "trigger": Commands.triggerSkillsCommand
+        },
+        "whoami": {
+            "trigger": Commands.triggerWhoAmICommand
+        },
+        "history": {
+            "trigger": Commands.triggerHistory
+        },
+        "ls": {
+            "trigger": Commands.triggerList
+        },
+        "cd": {
+            "trigger": Commands.triggerChangeDir,
+            "autocomplete": Commands.autocompleteChangeDir
+        },
+        "mkdir": {
+            "trigger": Commands.triggerMakeDir
+        },
+        "touch": {
+            "trigger": Commands.triggerTouch
+        },
+        "projects": {
+            "trigger": Commands.triggerProjects
+        },
+        "work": {
+            "trigger": Commands.triggerWork
+        },
+        "cv": {
+            "trigger": Commands.triggerCV
+        },
+        "contact": {
+            "trigger": Commands.triggerContact
+        },
     }
 
     static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
         let {command, args} = this.parseStdin(stdin);
-        let commandsAutocomplete = []
-        if (args.length === 0) {
-            commandsAutocomplete = Object.keys(Commands.commands).filter(command => {
-                return stdin === command.slice(0, stdin.length)
-            })
-
-        }
         let output = null
 
-        if (commandsAutocomplete.length === 1) {
-            setStdin(commandsAutocomplete[0])
-        } else if (commandsAutocomplete.length > 0) {
-            output = [commandsAutocomplete.join("  ")]
+        if (!Commands.isCommand(command)) {
+            output = this.getAutocomplete(command, Object.keys(Commands.commands));
+            if (typeof(output) === "string") {
+                setStdin(output)
+                output = null
+            }
+
+        } else {
+            output = Commands.commands[command]["autocomplete"](args)
+            if (typeof(output) === "string") {
+                setStdin(`${command} ${output}`)
+                output = null
+            }
         }
 
         Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
+    }
+
+    static getAutocomplete(element, list) {
+        let commandsAutocomplete = list.filter(e => {
+            return element === e.slice(0, element.length)
+        })
+
+
+        if (commandsAutocomplete.length === 1) {
+            return commandsAutocomplete[0]
+        } else if (commandsAutocomplete.length > 0) {
+            return [commandsAutocomplete.join("  ")]
+        }
+        return null;
+    }
+
+    static autocompleteChangeDir(args, setStdin) {
+        const possibleDirectory = args.length > 0 ? args[0] : ""
+        const subDirectories = Directory.currentDirectory.subDirectories.map(subDirectory => {
+            return subDirectory.name
+        })
+        return Commands.getAutocomplete(possibleDirectory, subDirectories, setStdin)
     }
 
     static combos = {
@@ -71,7 +123,7 @@ class Commands {
 
         let output = []
         if (Commands.isCommand(command)) {
-            output = this.commands[command](stdin, setStdin, stdout, setStdout, args)
+            output = this.commands[command]["trigger"](stdin, setStdin, stdout, setStdout, args)
         } else if (command !== "") {
             output = Commands.handleCommandNotFound(stdin, stdout, setStdout, args)
         } else {

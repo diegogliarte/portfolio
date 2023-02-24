@@ -22,7 +22,7 @@ function Line(props) {
                 </span>
             }
             {props.stdout === '' ? (
-                <span className="empty-span" visible>42</span>
+                <span className="empty-span" visible="true">42</span>
             ) : (
                 <span className="stdout" dangerouslySetInnerHTML={{__html: props.stdout}}/>
             )}

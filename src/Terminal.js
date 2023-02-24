@@ -34,7 +34,6 @@ function Terminal() {
             setStdin(Commands.getHistory(1))
         } else if (key === "Tab") {
             Commands.handleAutocomplete(stdin, setStdin, stdout, setStdout)
-            document.getElementById("terminal").focus()
             event.preventDefault()
             event.stopPropagation()
         }
