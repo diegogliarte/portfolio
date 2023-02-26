@@ -44,6 +44,9 @@ class Commands {
         "contact": {
             "trigger": Commands.triggerContact
         },
+        "certs": {
+            "trigger": Commands.triggerCerts
+        },
     }
 
     static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
@@ -330,6 +333,16 @@ class Commands {
 
     static triggerCancel(stdin, setStdin, stdout, setStdout, args) {
         return []
+    }
+
+    static triggerCerts(stdin, setStdin, stdout, setStdout, args) {
+        return [
+            "<a target='_blank'  href='https://www.credly.com/badges/e78a28b3-9aa4-4018-9fd2-f3c9599ca27f'>AI-900</a>",
+            "<a target='_blank'  href='https://www.credly.com/badges/3c082d94-c47c-4bdd-b641-d3a44e4ab2eb'>DP-900</a>",
+            "<a target='_blank'  href='https://www.credly.com/badges/755adedc-9f05-4eec-bf36-77fc551d96c1'>SC-900</a>",
+            "<a target='_blank'  href='https://www.credly.com/badges/189727aa-984e-4f13-8534-a95fbc47dd8a'>Google IT Automation Professional Certificate</a>",
+            "<a target='_blank'  href='https://www.credly.com/badges/b0b63300-1d92-4222-a7a0-94d4ab509f52'>Google IT Support Professional Certificate</a>"
+        ]
     }
 
     static executeCommand(stdin, setStdin, stdout, setStdout, output) {
