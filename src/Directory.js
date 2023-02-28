@@ -28,9 +28,19 @@ class Directory {
     static remove(names) {
         let output = []
         for (let name of names) {
-            let subDirectory = this.currentDirectory.getSubDirectory(name)
-            if (subDirectory !== null) {
-                this.currentDirectory.removeBlob(subDirectory)
+            let shouldRemove = true
+            let subDirectory = this.currentDirectory
+            let directories = name.split("/").filter(element => element)
+            for (let directory of directories) {
+                subDirectory = subDirectory.getSubDirectory(directory)
+                if (subDirectory === null) {
+                    shouldRemove = false
+                    break
+                }
+            }
+
+            if (shouldRemove) {
+                subDirectory.parent.removeBlob(subDirectory)
             } else {
                 output.push(`rm: cannot remove '${name}': No such file or directory`)
             }
