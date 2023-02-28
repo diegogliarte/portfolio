@@ -14,6 +14,11 @@ class Blob  {
         this.subDirectories.push(blob)
     }
 
+    removeBlob(blob) {
+        let index = this.subDirectories.indexOf(blob)
+        this.subDirectories.splice(index, 1)
+    }
+
     getSubDirectory(name) {
         if (name === ".") {
             return this

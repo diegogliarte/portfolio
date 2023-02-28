@@ -24,6 +24,20 @@ class Directory {
         }
     }
 
+
+    static remove(names) {
+        let output = []
+        for (let name of names) {
+            let subDirectory = this.currentDirectory.getSubDirectory(name)
+            if (subDirectory !== null) {
+                this.currentDirectory.removeBlob(subDirectory)
+            } else {
+                output.push(`rm: cannot remove '${name}': No such file or directory`)
+            }
+        }
+        return output
+    }
+
     static makeFile(names) {
         for (let name of names) {
             const file = new Blob(name, this.currentDirectory, "file")

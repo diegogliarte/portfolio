@@ -5,8 +5,16 @@ import 'normalize.css'
 
 import Terminal from './Terminal';
 import reportWebVitals from './reportWebVitals';
+import Directory from "./Directory";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+Directory.makeDir(["life"])
+Directory.changeDir("life")
+Directory.makeDir(["inner"])
+Directory.makeFile(["meaning.txt"])
+Directory.changeDir("..")
+
 root.render(
   <React.StrictMode>
     <Terminal />

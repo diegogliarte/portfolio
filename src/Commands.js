@@ -24,7 +24,7 @@ class Commands {
         },
         "cd": {
             "trigger": Commands.triggerChangeDir,
-            "autocomplete": Commands.autocompleteChangeDir
+            "autocomplete": Commands.autocompleteFolders
         },
         "mkdir": {
             "trigger": Commands.triggerMakeDir
@@ -47,22 +47,26 @@ class Commands {
         "certs": {
             "trigger": Commands.triggerCerts
         },
+        "rm": {
+            "trigger": Commands.triggerRemove,
+            "autocomplete": Commands.autocompleteBlob
+        },
     }
 
     static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
         let {command, args} = this.parseStdin(stdin);
-        let output = null
+        let output
 
         if (!Commands.isCommand(command)) {
             output = this.getAutocomplete(command, Object.keys(Commands.commands));
-            if (typeof(output) === "string") {
+            if (typeof (output) === "string") {
                 setStdin(output)
                 output = null
             }
 
         } else {
             output = Commands.commands[command]["autocomplete"](args)
-            if (typeof(output) === "string") {
+            if (typeof (output) === "string") {
                 setStdin(`${command} ${output}`)
                 output = null
             }
@@ -85,12 +89,40 @@ class Commands {
         return null;
     }
 
-    static autocompleteChangeDir(args, setStdin) {
+    static autocompleteBlob(args, setStdin, includeFile=true, includeFolder=true) {
         const possibleDirectory = args.length > 0 ? args[0] : ""
-        const subDirectories = Directory.currentDirectory.subDirectories.map(subDirectory => {
-            return subDirectory.name
-        })
-        return Commands.getAutocomplete(possibleDirectory, subDirectories, setStdin)
+
+        let directories = possibleDirectory.split("/")
+
+        let currentDirectory = Directory.currentDirectory
+        let path = ""
+        for (let directory of directories) {
+            const subDirectories = currentDirectory.subDirectories
+                .filter(subDirectory => {
+                    return subDirectory.isFolder() && includeFolder || subDirectory.isFile() && includeFile
+                })
+                .map(subDirectory => {
+                    return subDirectory.name
+                })
+            let autocomplete = Commands.getAutocomplete(directory, subDirectories, setStdin)
+            if (typeof (autocomplete) === "string") {
+                path += autocomplete + (currentDirectory.getSubDirectory(autocomplete).isFolder() ? "/" : "")
+                currentDirectory = currentDirectory.getSubDirectory(autocomplete)
+            } else {
+                return autocomplete
+            }
+        }
+
+        return path
+
+    }
+
+    static autocompleteFolders(args, setStdin) {
+        return Commands.autocompleteBlob(args, setStdin, false, true)
+    }
+
+    static autocompleteFiles(args, setStdin) {
+        return Commands.autocompleteBlob(args, setStdin, true, false)
     }
 
     static combos = {
@@ -206,7 +238,7 @@ class Commands {
 
     static triggerHistory(stdin, setStdin, stdout, setStdout, args) {
         return [
-            ...Commands.history.map((command,i) => {
+            ...Commands.history.map((command, i) => {
                 return `${i + 1} ${command}`
             })
         ]
@@ -232,23 +264,27 @@ class Commands {
         }
         if (args.length === 0) {
             Directory.changeDir("/")
-            return [
+            return []
+        }
+        let directories = args[0].split("/").filter(element => element);
+        let currentDirectory = Directory.currentDirectory
+        for (let directory of directories) {
+            if (!Directory.currentDirectory.getSubDirectory(directory)) {
+                Directory.currentDirectory = currentDirectory
+                return [
+                    `cd: ${args[0]}: No such file or directory`
+                ]
 
-            ]
+            }
+            if (Directory.currentDirectory.getSubDirectory(directory).isFile()) {
+                Directory.currentDirectory = currentDirectory
+                return [
+                    `cd: ${args[0]}: Not a directory`
+                ]
+            }
+            Directory.changeDir(directory)
         }
-        if (!Directory.currentDirectory.getSubDirectory(args[0])) {
-            return [
-                `cd: ${args[0]}: No such file or directory`
-            ]
-        }
-        if (Directory.currentDirectory.getSubDirectory(args[0]).isFile()) {
-            return [
-                `cd: ${args[0]}: Not a directory`
-            ]
-        }
-        Directory.changeDir(args[0])
-        return [
-        ]
+        return []
     }
 
     static triggerMakeDir(stdin, setStdin, stdout, setStdout, args) {
@@ -258,9 +294,7 @@ class Commands {
             ]
         }
         Directory.makeDir(args)
-        return [
-
-        ]
+        return []
     }
 
     static triggerTouch(stdin, setStdin, stdout, setStdout, args) {
@@ -270,9 +304,7 @@ class Commands {
             ]
         }
         Directory.makeFile(args)
-        return [
-
-        ]
+        return []
     }
 
     static triggerProjects(stdin, setStdin, stdout, setStdout, args) {
@@ -318,9 +350,7 @@ class Commands {
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
-        return [
-
-        ]
+        return []
     }
 
     static triggerContact(stdin, setStdin, stdout, setStdout, args) {
@@ -344,6 +374,18 @@ class Commands {
             "<a target='_blank'  href='https://www.credly.com/badges/b0b63300-1d92-4222-a7a0-94d4ab509f52'>Google IT Support Professional Certificate</a>"
         ]
     }
+
+    static triggerRemove(stdin, setStdin, stdout, setStdout, args) {
+        if (args.length === 0) {
+            return [
+                "rm: missing operand"
+            ]
+        }
+
+        let output = Directory.remove(args)
+        return output
+    }
+
 
     static executeCommand(stdin, setStdin, stdout, setStdout, output) {
         Commands.historyIndex = Commands.history.length
