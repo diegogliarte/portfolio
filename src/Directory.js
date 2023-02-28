@@ -28,18 +28,9 @@ class Directory {
     static remove(names) {
         let output = []
         for (let name of names) {
-            let shouldRemove = true
-            let subDirectory = this.currentDirectory
-            let directories = name.split("/").filter(element => element)
-            for (let directory of directories) {
-                subDirectory = subDirectory.getSubDirectory(directory)
-                if (subDirectory === null) {
-                    shouldRemove = false
-                    break
-                }
-            }
+            let subDirectory = this.isCompoundDirectoryValid(name);
 
-            if (shouldRemove) {
+            if (subDirectory !== null) {
                 subDirectory.parent.removeBlob(subDirectory)
             } else {
                 output.push(`rm: cannot remove '${name}': No such file or directory`)
@@ -49,11 +40,34 @@ class Directory {
     }
 
     static makeFile(names) {
+        let output = []
         for (let name of names) {
-            const file = new Blob(name, this.currentDirectory, "file")
-            this.currentDirectory.addBlob(file)
+            let directories = name.split("/")
+            let fileName = directories.pop()
+
+            let subDirectory = this.isCompoundDirectoryValid(directories.join("/"))
+            if (subDirectory) {
+                const file = new Blob(fileName, subDirectory, "file")
+                subDirectory.addBlob(file)
+            } else {
+                output.push(`touch: cannot touch '${name}': No such file or directory`)
+            }
+
         }
     }
+
+    static isCompoundDirectoryValid(name) {
+        let subDirectory = this.currentDirectory
+        let directories = name.split("/").filter(element => element)
+        for (let directory of directories) {
+            subDirectory = subDirectory.getSubDirectory(directory)
+            if (subDirectory === null) {
+                return null
+            }
+        }
+        return subDirectory;
+    }
+
 
     static getPrompt() {
         return this.prompt

@@ -30,7 +30,8 @@ class Commands {
             "trigger": Commands.triggerMakeDir
         },
         "touch": {
-            "trigger": Commands.triggerTouch
+            "trigger": Commands.triggerTouch,
+            "autocomplete": Commands.autocompleteFolders
         },
         "projects": {
             "trigger": Commands.triggerProjects
