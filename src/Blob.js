@@ -8,6 +8,7 @@ class Blob  {
         this.type = type
         this.prompt = (parent ? parent.prompt + "/" : "") + name
         this.subDirectories = []
+        this.content = type === "file" ? "" : null
     }
 
     addBlob(blob) {

@@ -6,13 +6,15 @@ import 'normalize.css'
 import Terminal from './Terminal';
 import reportWebVitals from './reportWebVitals';
 import Directory from "./Directory";
+import Blob from "./Blob";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 Directory.makeDir(["life"])
 Directory.changeDir("life")
-Directory.makeDir(["inner"])
-Directory.makeFile(["meaning.txt"])
+let meaning = new Blob("meaning.txt", Directory.currentDirectory, "file")
+meaning.content = 42
+Directory.currentDirectory.addBlob(meaning)
 Directory.changeDir("..")
 
 root.render(

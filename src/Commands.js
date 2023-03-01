@@ -1,5 +1,6 @@
 import Directory from "./Directory";
 import {logDOM} from "@testing-library/react";
+import blob from "./Blob";
 
 class Commands {
 
@@ -52,6 +53,10 @@ class Commands {
             "trigger": Commands.triggerRemove,
             "autocomplete": Commands.autocompleteBlob
         },
+        "cat": {
+            "trigger": Commands.triggerCat,
+            "autocomplete": Commands.autocompleteBlob
+        }
     }
 
     static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
@@ -63,6 +68,8 @@ class Commands {
             if (typeof (output) === "string") {
                 setStdin(output)
                 output = null
+            } else if (typeof (output) === "object") {
+                output = [output.join("  ")]
             }
 
         } else {
@@ -85,12 +92,12 @@ class Commands {
         if (commandsAutocomplete.length === 1) {
             return commandsAutocomplete[0]
         } else if (commandsAutocomplete.length > 0) {
-            return [commandsAutocomplete.join("  ")]
+            return commandsAutocomplete
         }
         return null;
     }
 
-    static autocompleteBlob(args, setStdin, includeFile=true, includeFolder=true) {
+    static autocompleteBlob(args, setStdin, includeFile = true, includeFolder = true) {
         const possibleDirectory = args.length > 0 ? args[0] : ""
 
         let directories = possibleDirectory.split("/")
@@ -109,8 +116,15 @@ class Commands {
             if (typeof (autocomplete) === "string") {
                 path += autocomplete + (currentDirectory.getSubDirectory(autocomplete).isFolder() ? "/" : "")
                 currentDirectory = currentDirectory.getSubDirectory(autocomplete)
+            } else if (autocomplete !== null) {
+                return [
+                    autocomplete.map(asdasd => {
+                    let blob = currentDirectory.getSubDirectory(asdasd)
+                    return `<span class=${blob.type}>${blob.name}</span>`
+                }).join("  ")
+                ]
             } else {
-                return autocomplete
+                return null
             }
         }
 
@@ -384,6 +398,17 @@ class Commands {
         }
 
         let output = Directory.remove(args)
+        return output
+    }
+
+    static triggerCat(stdin, setStdin, stdout, setStdout, args) {
+        if (args.length === 0) {
+            return [
+                "cat: missing operand"
+            ]
+        }
+
+        let output = Directory.getContent(args)
         return output
     }
 

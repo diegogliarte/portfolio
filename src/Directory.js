@@ -69,6 +69,25 @@ class Directory {
     }
 
 
+    static getContent(names) {
+        let output = []
+        for (let name of names) {
+            let directories = name.split("/").filter(element => element)
+            let fileName = directories.pop()
+
+            let subDirectory = this.isCompoundDirectoryValid(directories.join("/"))
+            let blob = subDirectory.getSubDirectory(fileName)
+            if (!subDirectory || !blob) {
+                output.push(`cat: '${name}': No such file or directory`)
+            } else if (!blob.isFile()) {
+                output.push(`cat: '${name}': Is a directory`)
+            } else if (blob.content !== "") {
+                output.push(blob.content)
+            }
+        }
+        return output
+    }
+
     static getPrompt() {
         return this.prompt
     }
