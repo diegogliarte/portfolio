@@ -27,7 +27,6 @@ function Terminal() {
 
         } else if (key === "Enter") {
             Commands.handleCommands(stdin, setStdin, stdout, setStdout)
-
         } else if (key === "ArrowUp") {
             setStdin(Commands.getHistory(-1))
         } else if (key === "ArrowDown") {
@@ -48,6 +47,7 @@ function Terminal() {
     useEffect(() => {
         document.addEventListener("keydown", handleKeyPress);
         return () => {
+            window.scrollTo(0, document.body.offsetHeight);
             document.removeEventListener("keydown", handleKeyPress);
 
         };
