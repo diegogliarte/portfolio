@@ -7,7 +7,7 @@ import Directory from "./Directory";
 function Terminal() {
     const [rawStdin, setRawStdin] = useState([])
     const [stdin, setStdin] = useState("")
-    const [stdout, setStdout] = useState([]);
+    const [stdout, setStdout] = useState([{id: 0, stdout: "Type 'help' for a list of supported commands", prompt: Directory.getPrompt()}]);
 
     function handleKeyPress(event) {
         let key = event.key;

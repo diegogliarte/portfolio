@@ -56,7 +56,7 @@ class Commands {
         "cat": {
             "trigger": Commands.triggerCat,
             "autocomplete": Commands.autocompleteBlob
-        }
+        },
     }
 
     static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
@@ -221,10 +221,11 @@ class Commands {
     }
 
     static triggerHelpCommand(stdin, setStdin, stdout, setStdout, args) {
-        const COMMANDS_MESSAGE = Object.keys(Commands.commands).join(" ")
+        const COMMANDS_MESSAGE = Object.keys(Commands.commands).sort()
         return ["GNU bash, version 0.42",
             "These shell commands are defined internally. Type 'help' to see this list.",
-            COMMANDS_MESSAGE
+            "",
+            ...COMMANDS_MESSAGE
         ]
     }
 
@@ -242,7 +243,21 @@ class Commands {
     }
 
     static triggerWhoAmICommand(stdin, setStdin, stdout, setStdout, args) {
-        return ["diegogliarte",
+        const banner = "" +
+            "     _ _                        _ _            _       \n" +
+            "    | (_)                      | (_)          | |      \n" +
+            "  __| |_  ___  __ _  ___   __ _| |_  __ _ _ __| |_ ___ \n" +
+            " / _` | |/ _ \\/ _` |/ _ \\ / _` | | |/ _` | '__| __/ _ \\\n" +
+            "| (_| | |  __/ (_| | (_) | (_| | | | (_| | |  | ||  __/\n" +
+            " \\__,_|_|\\___|\\__, |\\___/ \\__, |_|_|\\__,_|_|   \\__\\___|\n" +
+            "               __/ |       __/ |                       \n" +
+            "              |___/       |___/                        " +
+            ""
+        return [
+            "",
+            "",
+            ...banner.split("\n"),
+            "",
             "",
             "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with +1 " +
             "year of professional experience as a part-time software developer. My work experience is quite extensive " +
