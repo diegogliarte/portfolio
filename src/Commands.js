@@ -62,12 +62,33 @@ class Commands {
             "trigger": Commands.triggerTheme,
             "autocomplete": Commands.autocompleteTheme
         },
+        "'help'": {
+            "trigger": Commands.triggerWrongHelp,
+            "hidden": true
+        },
+        '"help"': {
+            "trigger": Commands.triggerWrongHelp,
+            "hidden": true
+        },
+
+
+
 
         "default": {
             "autocomplete": () => {
                 return null
+            },
+        }
+    }
+
+    static getVisibleCommands() {
+        let visibleCommands = []
+        for (let command of Object.keys(Commands.commands)) {
+            if (!Commands.commands[command]["hidden"]) {
+                visibleCommands.push(command)
             }
         }
+        return visibleCommands.sort()
     }
 
     static handleAutocomplete(terminal) {
@@ -75,7 +96,8 @@ class Commands {
         let output
 
         if (!Commands.isCommand(command)) {
-            output = this.getAutocomplete(command, Object.keys(Commands.commands));
+
+            output = this.getAutocomplete(command, Commands.getVisibleCommands());
             if (typeof (output) === "string") {
                 terminal.setState({stdin: output})
                 output = null
@@ -145,7 +167,6 @@ class Commands {
     }
 
     static autocompleteFolders(terminal, args) {
-        console.log(Commands.autocompleteBlob(args, false, true))
         return Commands.autocompleteBlob(args, false, true)
     }
 
@@ -228,7 +249,7 @@ class Commands {
     }
 
     static triggerHelpCommand() {
-        const COMMANDS_MESSAGE = Object.keys(Commands.commands).sort()
+        const COMMANDS_MESSAGE = Commands.getVisibleCommands()
         return ["GNU bash, version 0.42",
             "These shell commands are defined internally. Type 'help' to see this list.",
             "",
@@ -473,8 +494,13 @@ class Commands {
                 "theme: invalid theme. Currently 'dark', 'light' and 'matrix' available"
             ]
         }
+    }
 
-
+    static triggerWrongHelp() {
+        return [
+            "You almost got it!",
+            {"message": "Type help for a list of supported commands", "prompt": Directory.getPrompt()}
+        ]
     }
 
 
@@ -492,8 +518,8 @@ class Commands {
                 ...output.map((line, i) => {
                     return ({
                         id: terminal.state.stdout.length + i + 1,
-                        stdout: line,
-                        prompt: null
+                        stdout: line.message || line ,
+                        prompt: line.prompt || null
                     });
                 }),
             ]
