@@ -2,13 +2,25 @@
     color: var(--color-green);
 }
 
+.light .user {
+    color: var(--color-dark-green);
+}
+
 .tilde {
     color: var(--color-blue);
 
 }
 
+.light .tilde {
+    color: var(--color-dark-blue);
+}
+
 .cursor {
     color: var(--color-white)
+}
+
+.light .cursor {
+    color: var(--color-black);
 }
 
 .empty-span {
@@ -25,8 +37,16 @@
     color: var(--color-white);
 }
 
+.light .file {
+    color: var(--color-black);
+}
+
 .folder {
     color: var(--color-blue);
+}
+
+.light .folder {
+    color: var(--color-dark-blue);
 }
 
 span {
@@ -36,4 +56,8 @@ span {
 a {
     text-decoration: none;
     color: var(--color-blue);
+}
+
+.light a {
+    color: var(--color-dark-blue);
 }

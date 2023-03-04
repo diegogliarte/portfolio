@@ -4,8 +4,10 @@
   --color-red: #EB9BBD;
   --color-yellow: #F0EBAB;
   --color-green: #C7E38D;
+  --color-dark-green: #03C03C;
   --color-purple: #978BC4;
   --color-blue: #83B3E0;
+  --color-dark-blue: #579ABE;
 }
 
 body {
@@ -34,3 +36,9 @@ html::-webkit-scrollbar { /* WebKit */
   width: 0;
   height: 0;
 }
+
+.light {
+  color: var(--color-black);
+  background-color: var(--color-white);
+}
+

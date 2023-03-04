@@ -1,6 +1,4 @@
 import Directory from "./Directory";
-import {logDOM} from "@testing-library/react";
-import blob from "./Blob";
 
 class Commands {
 
@@ -57,16 +55,22 @@ class Commands {
             "trigger": Commands.triggerCat,
             "autocomplete": Commands.autocompleteBlob
         },
+        "secret": {
+            "trigger": Commands.triggerSecret,
+        },
+        "theme": {
+            "trigger": Commands.triggerTheme,
+        }
     }
 
-    static handleAutocomplete(stdin, setStdin, stdout, setStdout) {
-        let {command, args} = this.parseStdin(stdin);
+    static handleAutocomplete(terminal) {
+        let {command, args} = this.parseStdin(terminal.state.stdin);
         let output
 
         if (!Commands.isCommand(command)) {
             output = this.getAutocomplete(command, Object.keys(Commands.commands));
             if (typeof (output) === "string") {
-                setStdin(output)
+                terminal.setState({stdin: output})
                 output = null
             } else if (typeof (output) === "object") {
                 output = [output.join("  ")]
@@ -75,12 +79,12 @@ class Commands {
         } else {
             output = Commands.commands[command]["autocomplete"](args)
             if (typeof (output) === "string") {
-                setStdin(`${command} ${output}`)
+                terminal.setState({stdin: `${command} ${output}`})
                 output = null
             }
         }
 
-        Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
+        Commands.executeCommand(terminal, output)
     }
 
     static getAutocomplete(element, list) {
@@ -140,17 +144,6 @@ class Commands {
         return Commands.autocompleteBlob(args, setStdin, true, false)
     }
 
-    static combos = {
-        "17,67": Commands.triggerCancel
-    }
-
-    static isCombo(rawStdin) {
-
-    }
-
-    static handleCombos(rawStdin, stdin, setStdin, stdout, setStdout) {
-
-    }
 
 
     static history = []
@@ -164,25 +157,26 @@ class Commands {
         return Commands.history[Commands.historyIndex]
     }
 
-    static handleCommands(stdin, setStdin, stdout, setStdout) {
-        let {command, args} = this.parseStdin(stdin);
+    static handleCommands(terminal) {
+        let {command, args} = this.parseStdin(terminal.state.stdin);
 
-        if (stdin !== "") {
-            this.history.push(stdin)
+        if (terminal.state.stdin !== "") {
+            this.history.push(terminal.state.stdin)
         }
 
         let output = []
         if (Commands.isCommand(command)) {
-            output = this.commands[command]["trigger"](stdin, setStdin, stdout, setStdout, args)
+            output = this.commands[command]["trigger"](terminal, args)
         } else if (command !== "") {
-            output = Commands.handleCommandNotFound(stdin, stdout, setStdout, args)
+            output = Commands.handleCommandNotFound(terminal, args)
         } else {
-            output = Commands.handleEmptyCommand(stdin, stdout, setStdout, args)
+            output = Commands.handleEmptyCommand()
         }
 
-        setStdin("")
-        Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
+        terminal.setState({stdin: ""});
+        Commands.executeCommand(terminal, output);
     }
+
 
     static parseStdin(stdin) {
         let splitted = stdin.trim().split(" ")
@@ -197,18 +191,13 @@ class Commands {
         return {command, args};
     }
 
-    static handleCombos(stdin, setStdin, stdout, setStdout) {
-        let output = this.triggerCancel(stdin, setStdin, stdout, setStdout)
-        Commands.executeCommand(stdin, setStdin, stdout, setStdout, output)
-    }
-
-    static handleCommandNotFound(stdin, stdout, setStdout, args) {
+    static handleCommandNotFound(terminal) {
         return [
-            `${stdin}: command not found`
+            `${terminal.state.stdin}: command not found`
         ]
     }
 
-    static handleEmptyCommand(stdin, stdout, setStdout, args) {
+    static handleEmptyCommand() {
         return []
     }
 
@@ -220,7 +209,7 @@ class Commands {
         return command in this.commands
     }
 
-    static triggerHelpCommand(stdin, setStdin, stdout, setStdout, args) {
+    static triggerHelpCommand() {
         const COMMANDS_MESSAGE = Object.keys(Commands.commands).sort()
         return ["GNU bash, version 0.42",
             "These shell commands are defined internally. Type 'help' to see this list.",
@@ -229,12 +218,12 @@ class Commands {
         ]
     }
 
-    static triggerClearCommand(stdin, setStdin, stdout, setStdout, args) {
-        setStdout([])
+    static triggerClearCommand(terminal) {
+        terminal.setState({stdout: []})
         return null
     }
 
-    static triggerSkillsCommand(stdin, setStdin, stdout, setStdout, args) {
+    static triggerSkillsCommand() {
         return ["Languages: Python, JavaScript, bash, Java, SQL, C/C++",
             "Python Tech: OpenCV, numpy, Flask, FastAPI",
             "Website Tech: HTML, CSS, VanillaJS, React",
@@ -242,7 +231,7 @@ class Commands {
         ]
     }
 
-    static triggerWhoAmICommand(stdin, setStdin, stdout, setStdout, args) {
+    static triggerWhoAmICommand() {
         const banner = "" +
             "     _ _                        _ _            _       \n" +
             "    | (_)                      | (_)          | |      \n" +
@@ -266,7 +255,7 @@ class Commands {
         ]
     }
 
-    static triggerHistory(stdin, setStdin, stdout, setStdout, args) {
+    static triggerHistory() {
         return [
             ...Commands.history.map((command, i) => {
                 return `${i + 1} ${command}`
@@ -274,7 +263,7 @@ class Commands {
         ]
     }
 
-    static triggerList(stdin, setStdin, stdout, setStdout, args) {
+    static triggerList() {
         if (Directory.currentDirectory.subDirectories.length === 0) {
             return []
         }
@@ -286,7 +275,7 @@ class Commands {
         ]
     }
 
-    static triggerChangeDir(stdin, setStdin, stdout, setStdout, args) {
+    static triggerChangeDir(terminal, args) {
         if (args.length > 1) {
             return [
                 "cd: too many arguments"
@@ -317,7 +306,7 @@ class Commands {
         return []
     }
 
-    static triggerMakeDir(stdin, setStdin, stdout, setStdout, args) {
+    static triggerMakeDir(terminal, args) {
         if (args.length === 0) {
             return [
                 "mkdir: missing operand"
@@ -327,7 +316,7 @@ class Commands {
         return []
     }
 
-    static triggerTouch(stdin, setStdin, stdout, setStdout, args) {
+    static triggerTouch(terminal, args) {
         if (args.length === 0) {
             return [
                 "touch: missing file operand"
@@ -337,7 +326,7 @@ class Commands {
         return []
     }
 
-    static triggerProjects(stdin, setStdin, stdout, setStdout, args) {
+    static triggerProjects() {
         return [
             "Most of my projects can be found on my <a target='_blank' href='https://github.com/diegogliarte'>" +
             "GitHub</a>. Some of the most interesting ones are:",
@@ -363,7 +352,7 @@ class Commands {
         ]
     }
 
-    static triggerWork(stdin, setStdin, stdout, setStdout, args) {
+    static triggerWork() {
         return [
             "Oct 2021 - Present",
             "Software Developer, Perspectiv",
@@ -372,7 +361,7 @@ class Commands {
         ]
     }
 
-    static triggerCV(stdin, setStdin, stdout, setStdout, args) {
+    static triggerCV() {
         const fileUrl = "/files/CV.pdf";
         const downloadLink = document.createElement("a");
         downloadLink.href = fileUrl;
@@ -383,7 +372,7 @@ class Commands {
         return []
     }
 
-    static triggerContact(stdin, setStdin, stdout, setStdout, args) {
+    static triggerContact() {
         return [
             "<a href='mailto:diegogliarte@gmail.com'>diegogliarte@gmail.com</a>",
             "<a target='_blank' href='https://www.linkedin.com/in/diegogliarte/'>LinkedIn</a>",
@@ -391,11 +380,7 @@ class Commands {
         ]
     }
 
-    static triggerCancel(stdin, setStdin, stdout, setStdout, args) {
-        return []
-    }
-
-    static triggerCerts(stdin, setStdin, stdout, setStdout, args) {
+    static triggerCerts() {
         return [
             "<a target='_blank'  href='https://www.credly.com/badges/e78a28b3-9aa4-4018-9fd2-f3c9599ca27f'>AI-900</a>",
             "<a target='_blank'  href='https://www.credly.com/badges/3c082d94-c47c-4bdd-b641-d3a44e4ab2eb'>DP-900</a>",
@@ -405,7 +390,7 @@ class Commands {
         ]
     }
 
-    static triggerRemove(stdin, setStdin, stdout, setStdout, args) {
+    static triggerRemove(terminal, args) {
         if (args.length === 0) {
             return [
                 "rm: missing operand"
@@ -416,7 +401,7 @@ class Commands {
         return output
     }
 
-    static triggerCat(stdin, setStdin, stdout, setStdout, args) {
+    static triggerCat(terminal, args) {
         if (args.length === 0) {
             return [
                 "cat: missing operand"
@@ -427,25 +412,63 @@ class Commands {
         return output
     }
 
+    static triggerSecret(terminal, args) {
+        if (args.length === 0) {
+            return [
+                "secret: missing password to access the deep secrets of this terminal"
+            ]
+        } else if (args.length > 1) {
+            return [
+                "secret: try only with one password"
+            ]
+        } else if (args[0] === "42") {
+            return [
+                "It seems like you've decoded the secrets of this terminal",
+                "Go further beyond and push the boundaries of your limits",
+                "",
+                "But be careful, some things should better remain unknown... ",
+                "<a target='_blank'  href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>The Meaning of Life</a>",
+            ]
+        } else {
+            return [
+                "secret: invalid password"
+            ]
+        }
+    }
 
-    static executeCommand(stdin, setStdin, stdout, setStdout, output) {
+    static triggerTheme(terminal, args) {
+        if (args.length === 0) {
+            return [
+                "theme: missing theme operand. Currently 'dark', 'light' and 'matrix' available"
+            ]
+        } else if (args.length > 1) {
+            return [
+                "theme: too many arguments"
+            ]
+        }
+
+
+    }
+
+
+    static executeCommand(terminal, output) {
         Commands.historyIndex = Commands.history.length
 
         if (output === null) {
             return
         }
 
-        setStdout([
-            ...stdout,
-            {id: stdout.length, stdout: stdin, prompt: Directory.getPrompt()},
+        terminal.setState({stdout: [
+            ...terminal.state.stdout,
+            {id: terminal.state.stdout.length, stdout: terminal.state.stdin, prompt: Directory.getPrompt()},
             ...output.map((line, i) => {
                 return ({
-                    id: stdout.length + i + 1,
+                    id: terminal.state.stdout.length + i + 1,
                     stdout: line,
                     prompt: null
                 });
             }),
-        ]);
+        ]});
         Directory.updatePrompt()
     }
 
