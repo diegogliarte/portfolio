@@ -60,6 +60,13 @@ class Commands {
         },
         "theme": {
             "trigger": Commands.triggerTheme,
+            "autocomplete": Commands.autocompleteTheme
+        },
+
+        "default": {
+            "autocomplete": () => {
+                return null
+            }
         }
     }
 
@@ -72,12 +79,13 @@ class Commands {
             if (typeof (output) === "string") {
                 terminal.setState({stdin: output})
                 output = null
-            } else if (typeof (output) === "object") {
+            } else if (output !== null && typeof (output) === "object") {
                 output = [output.join("  ")]
             }
 
         } else {
-            output = Commands.commands[command]["autocomplete"](args)
+            const autocompleteMethod = Commands.commands[command]["autocomplete"] || Commands.commands["default"]["autocomplete"]
+            output = autocompleteMethod(terminal, args)
             if (typeof (output) === "string") {
                 terminal.setState({stdin: `${command} ${output}`})
                 output = null
@@ -101,7 +109,7 @@ class Commands {
         return null;
     }
 
-    static autocompleteBlob(args, setStdin, includeFile = true, includeFolder = true) {
+    static autocompleteBlob(args, includeFile = true, includeFolder = true) {
         const possibleDirectory = args.length > 0 ? args[0] : ""
 
         let directories = possibleDirectory.split("/")
@@ -116,16 +124,16 @@ class Commands {
                 .map(subDirectory => {
                     return subDirectory.name
                 })
-            let autocomplete = Commands.getAutocomplete(directory, subDirectories, setStdin)
+            let autocomplete = Commands.getAutocomplete(directory, subDirectories)
             if (typeof (autocomplete) === "string") {
                 path += autocomplete + (currentDirectory.getSubDirectory(autocomplete).isFolder() ? "/" : "")
                 currentDirectory = currentDirectory.getSubDirectory(autocomplete)
             } else if (autocomplete !== null) {
                 return [
-                    autocomplete.map(asdasd => {
-                    let blob = currentDirectory.getSubDirectory(asdasd)
-                    return `<span class=${blob.type}>${blob.name}</span>`
-                }).join("  ")
+                    autocomplete.map(directory => {
+                        let blob = currentDirectory.getSubDirectory(directory)
+                        return `<span class=${blob.type}>${blob.name}</span>`
+                    }).join("  ")
                 ]
             } else {
                 return null
@@ -136,14 +144,24 @@ class Commands {
 
     }
 
-    static autocompleteFolders(args, setStdin) {
-        return Commands.autocompleteBlob(args, setStdin, false, true)
+    static autocompleteFolders(terminal, args) {
+        console.log(Commands.autocompleteBlob(args, false, true))
+        return Commands.autocompleteBlob(args, false, true)
     }
 
-    static autocompleteFiles(args, setStdin) {
-        return Commands.autocompleteBlob(args, setStdin, true, false)
+    static autocompleteFiles(terminal, args) {
+        return Commands.autocompleteBlob(args, true, false)
     }
 
+    static autocompleteTheme(terminal, args) {
+        const autocomplete = Commands.getAutocomplete(args.length === 1 ? args[0] : "", terminal.themes)
+
+        if (typeof (autocomplete) === "string") {
+            return autocomplete
+        } else {
+            return [autocomplete.join("  ")]
+        }
+    }
 
 
     static history = []
@@ -445,6 +463,15 @@ class Commands {
             return [
                 "theme: too many arguments"
             ]
+        } else if (terminal.themes.includes(args[0])) {
+            terminal.setState({theme: args[0]})
+            document.body.classList.remove(terminal.state.theme)
+            document.body.classList.add(args[0])
+            return []
+        } else {
+            return [
+                "theme: invalid theme. Currently 'dark', 'light' and 'matrix' available"
+            ]
         }
 
 
@@ -458,17 +485,19 @@ class Commands {
             return
         }
 
-        terminal.setState({stdout: [
-            ...terminal.state.stdout,
-            {id: terminal.state.stdout.length, stdout: terminal.state.stdin, prompt: Directory.getPrompt()},
-            ...output.map((line, i) => {
-                return ({
-                    id: terminal.state.stdout.length + i + 1,
-                    stdout: line,
-                    prompt: null
-                });
-            }),
-        ]});
+        terminal.setState({
+            stdout: [
+                ...terminal.state.stdout,
+                {id: terminal.state.stdout.length, stdout: terminal.state.stdin, prompt: Directory.getPrompt()},
+                ...output.map((line, i) => {
+                    return ({
+                        id: terminal.state.stdout.length + i + 1,
+                        stdout: line,
+                        prompt: null
+                    });
+                }),
+            ]
+        });
         Directory.updatePrompt()
     }
 

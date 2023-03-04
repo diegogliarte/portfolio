@@ -21,6 +21,7 @@ class Terminal extends Component {
         };
 
         this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.themes = ["dark", "light", "matrix", "rainbow"]
     }
 
     componentDidMount() {

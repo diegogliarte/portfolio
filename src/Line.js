@@ -13,7 +13,7 @@ function Line(props) {
     }, []);
 
     return (
-        <div className={"line" + props.theme}>
+        <div className={"line " + props.theme}>
             {props.prompt !== null &&
                 <span className="prompt">
                     <span className="user">diegogliarte@ubuntu</span>
