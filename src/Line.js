@@ -3,7 +3,6 @@ import "./Line.css"
 
 function Line(props) {
     const [showCursor, setShowCursor] = useState(true);
-    let a = 1
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -13,7 +12,7 @@ function Line(props) {
     }, []);
 
     return (
-        <div className={"line " + props.theme}>
+        <div className={"line " + props.theme} data-testid="line">
             {props.prompt !== null &&
                 <span className="prompt">
                     <span className="user">diegogliarte@ubuntu</span>
