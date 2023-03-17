@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import Line from "./Line";
 import "./Terminal.css";
 import Commands from "./Commands";
@@ -18,10 +18,11 @@ class Terminal extends Component {
                 },
             ],
             theme: "dark",
+            cursorPosition: 0,
         };
 
         this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.themes = ["dark", "light", "matrix", "rainbow"]
+        this.themes = ["dark", "light", "matrix"]
     }
 
     componentDidMount() {
@@ -40,17 +41,32 @@ class Terminal extends Component {
         let key = event.key;
 
         if (/^[a-zA-Z0-9!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~ ]$/.test(key)) {
-            this.setState((prevState) => ({ stdin: prevState.stdin + key }));
-        } else if (key === "Backspace") {
             this.setState((prevState) => ({
-                stdin: prevState.stdin.slice(0, -1),
+                stdin: prevState.stdin.slice(0, prevState.cursorPosition) + key +
+                    prevState.stdin.slice(prevState.cursorPosition),
+                cursorPosition: prevState.cursorPosition + 1
             }));
+        } else if (key === "Backspace") {
+            if (this.state.cursorPosition != 0) {
+                this.setState((prevState) => ({
+                    stdin: prevState.stdin.slice(0, prevState.cursorPosition - 1) + prevState.stdin.slice(prevState.cursorPosition),
+                    cursorPosition: Math.max(prevState.cursorPosition - 1, 0)
+                }));
+            }
         } else if (key === "Enter") {
             Commands.handleCommands(this);
         } else if (key === "ArrowUp") {
-            this.setState({ stdin: Commands.getHistory(-1) });
+            this.setState({stdin: Commands.getHistory(-1)});
         } else if (key === "ArrowDown") {
-            this.setState({ stdin: Commands.getHistory(1) });
+            this.setState({stdin: Commands.getHistory(1)});
+        } else if (key === "ArrowLeft") {
+            this.setState((prevState) => ({
+                cursorPosition: Math.max(prevState.cursorPosition - 1, 0)
+            }));
+        } else if (key === "ArrowRight") {
+            this.setState((prevState) => ({
+                cursorPosition: Math.min(prevState.cursorPosition + 1, prevState.stdin.length)
+            }));
         } else if (key === "Tab") {
             Commands.handleAutocomplete(this);
             event.preventDefault();
@@ -74,6 +90,7 @@ class Terminal extends Component {
                     current={true}
                     prompt={Directory.getPrompt()}
                     theme={this.state.theme}
+                    cursorPosition={this.state.cursorPosition}
                 />
             </div>
         );

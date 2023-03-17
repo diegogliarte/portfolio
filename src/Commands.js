@@ -99,7 +99,7 @@ class Commands {
 
             output = this.getAutocomplete(command, Commands.getVisibleCommands());
             if (typeof (output) === "string") {
-                terminal.setState({stdin: output})
+                terminal.setState({stdin: output, cursorPosition: output.length})
                 output = null
             } else if (output !== null && typeof (output) === "object") {
                 output = [output.join("  ")]
@@ -109,8 +109,10 @@ class Commands {
             const autocompleteMethod = Commands.commands[command]["autocomplete"] || Commands.commands["default"]["autocomplete"]
             output = autocompleteMethod(terminal, args)
             if (typeof (output) === "string") {
-                terminal.setState({stdin: `${command} ${output}`})
+                terminal.setState({stdin: `${command} ${output}`, cursorPosition: `${command} ${output}`.length})
                 output = null
+            } else if (output !== null && typeof (output) === "object") {
+                output = [output.join("  ")]
             }
         }
 
@@ -175,13 +177,7 @@ class Commands {
     }
 
     static autocompleteTheme(terminal, args) {
-        const autocomplete = Commands.getAutocomplete(args.length === 1 ? args[0] : "", terminal.themes)
-
-        if (typeof (autocomplete) === "string") {
-            return autocomplete
-        } else {
-            return [autocomplete.join("  ")]
-        }
+        return Commands.getAutocomplete(args.length === 1 ? args[0] : "", terminal.themes)
     }
 
 
@@ -212,7 +208,7 @@ class Commands {
             output = Commands.handleEmptyCommand()
         }
 
-        terminal.setState({stdin: ""});
+        terminal.setState({stdin: "", cursorPosition: 0});
         Commands.executeCommand(terminal, output);
     }
 

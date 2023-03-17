@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import "./Line.css"
+import {logDOM} from "@testing-library/react";
 
 function Line(props) {
     const [showCursor, setShowCursor] = useState(true);
@@ -21,13 +22,20 @@ function Line(props) {
                     <span>$ </span>
                 </span>
             }
-            {props.stdout === '' ? (
+            {props.stdout === '' && !props.current ? (
                 <span className="empty-span" visible="true">42</span>
+            ) : props.current ? (
+                <span className="stdout">
+                    {props.stdout.split("").map((character, idx) => (
+                        idx === props.cursorPosition && showCursor ? <span key={idx} className="cursor">█</span> : <span key={idx}>{character}</span>
+                    ))}
+
+                    {props.stdout.length === props.cursorPosition && showCursor ? <span className="cursor">█</span> : ""}
+                </span>
             ) : (
                 <span className="stdout" dangerouslySetInnerHTML={{__html: props.stdout}}/>
+                    // <span className="stdout">{props.stdout}</span>
             )}
-            {props.current &&
-                <span className="cursor">{showCursor ? '█' : ''}</span>}
         </div>
     );
 }
