@@ -389,7 +389,7 @@ class Commands {
 
     static triggerWork() {
         return [
-            "Oct 2021 - Present",
+            "Oct 2021 - March 2023",
             "Software Developer, Perspectiv",
             "",
             "Type 'cv' to download my full CV"

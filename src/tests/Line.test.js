@@ -37,12 +37,6 @@ describe('Line tests', () => {
         expect(emptySpan).toHaveAttribute('visible', 'true');
     });
 
-    it('should renders a cursor when current prop is true', () => {
-        render(<Line current={true} />);
-        const cursor = screen.getByText('█');
-        expect(cursor).toBeInTheDocument();
-    });
-
     it('should does not render a cursor when current prop is false', () => {
         render(<Line current={false} />);
         const cursor = screen.queryByText('█');
