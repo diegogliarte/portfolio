@@ -5,6 +5,7 @@
   --color-yellow: #F0EBAB;
   --color-green: #C7E38D;
   --color-dark-green: #03C03C;
+  --color-green-matrix: #00FF41;
   --color-purple: #978BC4;
   --color-blue: #83B3E0;
   --color-dark-blue: #579ABE;
@@ -38,12 +39,12 @@ html::-webkit-scrollbar { /* WebKit */
 }
 
 .light {
-  color: var(--color-black);
-  background-color: var(--color-white);
+  color: var(--color-black) !important;
+  background-color: var(--color-white) !important;
 }
 
 body.matrix *, body.matrix {
-  color: #00FF41;
+  color: var(--color-green-matrix);
   background-color: black !important;
 }
 

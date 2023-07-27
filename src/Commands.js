@@ -147,7 +147,6 @@ class Commands {
                     return subDirectory.name
                 })
             let autocomplete = Commands.getAutocomplete(directory, subDirectories)
-            console.log(autocomplete)
             if (typeof (autocomplete) === "string") {
                 path += autocomplete + (currentDirectory.getSubDirectory(autocomplete).isFolder() ? "/" : "")
                 currentDirectory = currentDirectory.getSubDirectory(autocomplete)
@@ -249,8 +248,8 @@ class Commands {
     static triggerHelpCommand() {
         const COMMANDS_MESSAGE = Commands.getVisibleCommands()
         return ["GNU bash, version 0.42",
-            "These shell commands are defined internally. Type 'help' to see this list.",
             "<a href='' onclick=\"event.preventDefault();\">Underlined text is clickable</a>",
+            "These shell commands are defined internally. Type 'help' to see this list.",
             "",
             ...COMMANDS_MESSAGE
         ]

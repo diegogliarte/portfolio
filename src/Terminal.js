@@ -58,7 +58,14 @@ class Terminal extends Component {
                 }));
             }
         } else if (key === "Enter") {
+            event.preventDefault();
+            if (this.state.isTouchDevice) {
+                let textarea = document.getElementById("textarea-touch")
+                this.state.stdin = textarea.value.trim()
+                textarea.value = ""
+            }
             Commands.handleCommands(this);
+
         } else if (key === "ArrowUp") {
             this.setState({stdin: Commands.getHistory(-1)});
         } else if (key === "ArrowDown") {

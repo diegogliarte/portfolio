@@ -25,12 +25,7 @@
 
 .empty-span {
     font-size: 0;
-    line-height: 0;
-    visibility: hidden;
-}
-
-.empty-span:empty {
-    visibility: visible;
+    line-height: 1rem;
 }
 
 .line {
@@ -76,10 +71,11 @@ a:hover {
     border: none;
     resize: none;
     outline: none;
-    background-color: var(--color-white);
-    color: var(--color-black);
+    background-color: var(--color-black);
+    color: var(--color-white);
     margin: 0;
     padding: 0;
+    width: 100%;
 }
 
 .textarea-touch:focus {

@@ -32,7 +32,8 @@ function Line(props) {
             ) : props.isTouchDevice ? (
                 <textarea
                     rows='1'
-                    className="stdout textarea-touch"
+                    id="textarea-touch"
+                    className={"stdout textarea-touch " + props.theme}
                     autoFocus
                 />
             ) : props.current ? (
