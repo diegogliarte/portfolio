@@ -32,7 +32,6 @@ function Line(props) {
             ) : props.isTouchDevice ? (
                 <textarea
                     rows='1'
-                    value={props.stdout}
                     className="stdout textarea-touch"
                     autoFocus
                 />
@@ -46,7 +45,6 @@ function Line(props) {
                 </span>
             ) : (
                 <span className="stdout" dangerouslySetInnerHTML={{__html: props.stdout}}/>
-                    // <span className="stdout">{props.stdout}</span>
             )}
         </div>
     );
