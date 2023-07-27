@@ -27,7 +27,7 @@ function Line(props) {
 
             {/* Renders empty message */}
             {props.stdout === '' && !props.current ? (
-                <span className="empty-span" visible="true">42</span>
+                <span className="empty-span">42</span>
 
             ) : props.isTouchDevice ? (
                 <textarea

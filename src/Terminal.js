@@ -3,6 +3,7 @@ import Line from "./Line";
 import "./Terminal.css";
 import Commands from "./Commands";
 import Directory from "./Directory";
+import {handleAutocomplete} from "./autocomplete";
 
 class Terminal extends Component {
     constructor(props) {
@@ -79,9 +80,9 @@ class Terminal extends Component {
                 cursorPosition: Math.min(prevState.cursorPosition + 1, prevState.stdin.length)
             }));
         } else if (key === "Tab") {
-            Commands.handleAutocomplete(this);
             event.preventDefault();
             event.stopPropagation();
+            handleAutocomplete(this);
         }
     }
 
