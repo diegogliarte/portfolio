@@ -49,11 +49,11 @@ class Commands {
         },
         "rm": {
             "trigger": Commands.triggerRemove,
-            "autocomplete": Commands.autocompleteBlob
+            "autocomplete": Commands.autocompleteFoldersAndFiles
         },
         "cat": {
             "trigger": Commands.triggerCat,
-            "autocomplete": Commands.autocompleteBlob
+            "autocomplete": Commands.autocompleteFoldersAndFiles
         },
         "secret": {
             "trigger": Commands.triggerSecret,
@@ -73,11 +73,12 @@ class Commands {
 
 
 
-
         "default": {
             "autocomplete": () => {
                 return null
             },
+            "hidden": true,
+            "disabled": true
         }
     }
 
@@ -96,7 +97,6 @@ class Commands {
         let output
 
         if (!Commands.isCommand(command)) {
-
             output = this.getAutocomplete(command, Commands.getVisibleCommands());
             if (typeof (output) === "string") {
                 terminal.setState({stdin: output, cursorPosition: output.length})
@@ -115,7 +115,6 @@ class Commands {
                 output = [output.join("  ")]
             }
         }
-
         Commands.executeCommand(terminal, output)
     }
 
@@ -135,7 +134,6 @@ class Commands {
 
     static autocompleteBlob(args, includeFile = true, includeFolder = true) {
         const possibleDirectory = args.length > 0 ? args[0] : ""
-
         let directories = possibleDirectory.split("/")
 
         let currentDirectory = Directory.currentDirectory
@@ -143,12 +141,13 @@ class Commands {
         for (let directory of directories) {
             const subDirectories = currentDirectory.subDirectories
                 .filter(subDirectory => {
-                    return subDirectory.isFolder() && includeFolder || subDirectory.isFile() && includeFile
+                    return (subDirectory.isFolder() && includeFolder) || (subDirectory.isFile() && includeFile)
                 })
                 .map(subDirectory => {
                     return subDirectory.name
                 })
             let autocomplete = Commands.getAutocomplete(directory, subDirectories)
+            console.log(autocomplete)
             if (typeof (autocomplete) === "string") {
                 path += autocomplete + (currentDirectory.getSubDirectory(autocomplete).isFolder() ? "/" : "")
                 currentDirectory = currentDirectory.getSubDirectory(autocomplete)
@@ -165,7 +164,6 @@ class Commands {
         }
 
         return path
-
     }
 
     static autocompleteFolders(terminal, args) {
@@ -174,6 +172,10 @@ class Commands {
 
     static autocompleteFiles(terminal, args) {
         return Commands.autocompleteBlob(args, true, false)
+    }
+
+    static autocompleteFoldersAndFiles(terminal, args) {
+        return Commands.autocompleteBlob(args, true, true)
     }
 
     static autocompleteTheme(terminal, args) {
@@ -199,7 +201,7 @@ class Commands {
             this.history.push(terminal.state.stdin)
         }
 
-        let output = []
+        let output;
         if (Commands.isCommand(command)) {
             output = this.commands[command]["trigger"](terminal, args)
         } else if (command !== "") {
@@ -241,13 +243,14 @@ class Commands {
     }
 
     static isCommand(command) {
-        return command in this.commands
+        return command in this.commands && !this.commands[command]["disabled"]
     }
 
     static triggerHelpCommand() {
         const COMMANDS_MESSAGE = Commands.getVisibleCommands()
         return ["GNU bash, version 0.42",
             "These shell commands are defined internally. Type 'help' to see this list.",
+            "<a href='' onclick=\"event.preventDefault();\">Underlined text is clickable</a>",
             "",
             ...COMMANDS_MESSAGE
         ]
@@ -283,10 +286,8 @@ class Commands {
             ...banner.split("\n"),
             "",
             "",
-            "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with +1 " +
-            "year of professional experience as a part-time software developer. My work experience is quite extensive " +
-            "due to working on a small team and being involved in every step towards the final product. Always " +
-            "learning new technologies and facing new challenges!"
+            "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with almost " +
+            "2 years of professional experience as a software developer. Always in the process of improving."
         ]
     }
 
@@ -368,22 +369,22 @@ class Commands {
             "",
             "<a target='_blank' href='https://github.com/diegogliarte/portfolio'>Terminal Portfolio</a>",
             "The website you are browsing right now!",
-            "Tech >> React, JS, CSS, HTML, Unix",
+            ">> React, JS, CSS, HTML, Unix <<",
             "",
             "<a target='_blank' href='https://github.com/diegogliarte/p5js-projects'>Sudoku Recognizer</a>",
             "Interprets a video stream to detect a sudoku, build it, and solve it using backtracking",
-            "Tech >> Python, OpenCV, Machine Learning, Computer Vision",
+            ">> Python, OpenCV, Machine Learning, Computer Vision <<",
             "",
             "<a target='_blank' href='https://github.com/diegogliarte/p5js-projects'>Various Mini Games</a>",
             "Made in the span of two weeks because I was bored an wanted to see if I would be able to code them " +
             "without any reference. Snake, Tic Tac Toe, Minesweeper, Flappy Birds... You name it!",
-            "Tech >> p5js, JS, CSS, HTML",
+            ">> p5js, JS, CSS, HTML <<",
             "",
             "<a target='_blank' href='https://github.com/diegogliarte/terminal-sorting-visualizer'>Terminal Sorting Visualizer</a>",
             "Visualizer for the most common sorting algorithms such as Quicksort, Bubblesort, Selectionsort, among " +
             "some weird ones like Bongosort or Stalinsort (yeah, you heard right). Used ANSI escape codes to " +
             "optimize performance",
-            "Tech >> Python, ANSI escape codes",
+            ">> Python, ANSI escape codes <<",
         ]
     }
 
@@ -404,7 +405,7 @@ class Commands {
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
-        return []
+        return ["Downloading CV..."]
     }
 
     static triggerContact() {
@@ -420,6 +421,7 @@ class Commands {
             "<a target='_blank'  href='https://www.credly.com/badges/e78a28b3-9aa4-4018-9fd2-f3c9599ca27f'>AI-900</a>",
             "<a target='_blank'  href='https://www.credly.com/badges/3c082d94-c47c-4bdd-b641-d3a44e4ab2eb'>DP-900</a>",
             "<a target='_blank'  href='https://www.credly.com/badges/755adedc-9f05-4eec-bf36-77fc551d96c1'>SC-900</a>",
+            "<a target='_blank'  href='https://www.credly.com/badges/e4f7fdbb-8257-47f6-971c-54bcc8ae9a5c'>Google Data Analytics Certificate</a>",
             "<a target='_blank'  href='https://www.credly.com/badges/189727aa-984e-4f13-8534-a95fbc47dd8a'>Google IT Automation Professional Certificate</a>",
             "<a target='_blank'  href='https://www.credly.com/badges/b0b63300-1d92-4222-a7a0-94d4ab509f52'>Google IT Support Professional Certificate</a>"
         ]

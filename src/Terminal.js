@@ -47,7 +47,7 @@ class Terminal extends Component {
                 cursorPosition: prevState.cursorPosition + 1
             }));
         } else if (key === "Backspace") {
-            if (this.state.cursorPosition != 0) {
+            if (this.state.cursorPosition !== 0) {
                 this.setState((prevState) => ({
                     stdin: prevState.stdin.slice(0, prevState.cursorPosition - 1) + prevState.stdin.slice(prevState.cursorPosition),
                     cursorPosition: Math.max(prevState.cursorPosition - 1, 0)

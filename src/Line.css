@@ -57,6 +57,13 @@ a {
     color: var(--color-blue);
 }
 
-.light a {
-    color: var(--color-dark-blue);
+
+a:hover {
+    color: var(--color-white);
 }
+
+.light a:hover {
+    color: var(--color-black);
+}
+
+
