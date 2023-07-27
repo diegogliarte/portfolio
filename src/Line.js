@@ -14,6 +14,8 @@ function Line(props) {
 
     return (
         <div className={"line " + props.theme} data-testid="line">
+
+            {/* Renders prompt (diegogliarte@ubuntu:~$ )*/}
             {props.prompt !== null &&
                 <span className="prompt">
                     <span className="user">diegogliarte@ubuntu</span>
@@ -22,8 +24,18 @@ function Line(props) {
                     <span>$ </span>
                 </span>
             }
+
+            {/* Renders empty message */}
             {props.stdout === '' && !props.current ? (
                 <span className="empty-span" visible="true">42</span>
+
+            ) : props.isTouchDevice ? (
+                <textarea
+                    rows='1'
+                    value={props.stdout}
+                    className="stdout textarea-touch"
+                    autoFocus
+                />
             ) : props.current ? (
                 <span className="stdout">
                     {props.stdout.split("").map((character, idx) => (

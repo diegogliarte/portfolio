@@ -19,6 +19,7 @@ class Terminal extends Component {
             ],
             theme: "dark",
             cursorPosition: 0,
+            isTouchDevice: false
         };
 
         this.handleKeyPress = this.handleKeyPress.bind(this);
@@ -27,6 +28,9 @@ class Terminal extends Component {
 
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
+
+        const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+        this.setState({isTouchDevice});
     }
 
     componentDidUpdate() {
@@ -91,6 +95,7 @@ class Terminal extends Component {
                     prompt={Directory.getPrompt()}
                     theme={this.state.theme}
                     cursorPosition={this.state.cursorPosition}
+                    isTouchDevice={this.state.isTouchDevice}
                 />
             </div>
         );

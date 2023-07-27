@@ -33,6 +33,10 @@
     visibility: visible;
 }
 
+.line {
+    display: flex;
+}
+
 .file {
     color: var(--color-white);
 }
@@ -67,3 +71,18 @@ a:hover {
 }
 
 
+/* Custom CSS for the textarea-based terminal */
+.textarea-touch {
+    border: none;
+    resize: none;
+    outline: none;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    margin: 0;
+    padding: 0;
+}
+
+.textarea-touch:focus {
+    border: none;
+    outline: none;
+}
