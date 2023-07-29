@@ -1,4 +1,4 @@
-import Directory from "./Directory";
+import DirectoryManager from "./DirectoryManager";
 import {autocompleteFolders, autocompleteFoldersAndFiles, autocompleteTheme} from "./autocomplete";
 
 class Commands {
@@ -125,9 +125,9 @@ class Commands {
 
 
     static parseStdin(stdin) {
-        let splitted = stdin.trim().split(" ")
-        let command = splitted[0].trim()
-        let args = splitted.slice(1)
+        let split = stdin.trim().split(" ")
+        let command = split[0].trim()
+        let args = split.slice(1)
             .map(arg => {
                 return arg.trim()
             })
@@ -179,22 +179,7 @@ class Commands {
     }
 
     static triggerWhoAmICommand() {
-        const banner = "" +
-            "     _ _                        _ _            _       \n" +
-            "    | (_)                      | (_)          | |      \n" +
-            "  __| |_  ___  __ _  ___   __ _| |_  __ _ _ __| |_ ___ \n" +
-            " / _` | |/ _ \\/ _` |/ _ \\ / _` | | |/ _` | '__| __/ _ \\\n" +
-            "| (_| | |  __/ (_| | (_) | (_| | | | (_| | |  | ||  __/\n" +
-            " \\__,_|_|\\___|\\__, |\\___/ \\__, |_|_|\\__,_|_|   \\__\\___|\n" +
-            "               __/ |       __/ |                       \n" +
-            "              |___/       |___/                        " +
-            ""
         return [
-            "",
-            "",
-            ...banner.split("\n"),
-            "",
-            "",
             "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with almost " +
             "2 years of professional experience as a software developer. Always in the process of improving."
         ]
@@ -209,12 +194,12 @@ class Commands {
     }
 
     static triggerList() {
-        if (Directory.currentDirectory.subDirectories.length === 0) {
+        if (DirectoryManager.currentDirectory.subDirectories.length === 0) {
             return []
         }
 
         return [
-            Directory.currentDirectory.subDirectories.map(subDirectory => {
+            DirectoryManager.currentDirectory.subDirectories.map(subDirectory => {
                 return `<span class=${subDirectory.type}>${subDirectory.name}</span>`
             }).join("  ")
         ]
@@ -227,26 +212,26 @@ class Commands {
             ]
         }
         if (args.length === 0) {
-            Directory.changeDir("/")
+            DirectoryManager.changeDir("/")
             return []
         }
         let directories = args[0].split("/").filter(element => element);
-        let currentDirectory = Directory.currentDirectory
+        let currentDirectory = DirectoryManager.currentDirectory
         for (let directory of directories) {
-            if (!Directory.currentDirectory.getSubDirectory(directory)) {
-                Directory.currentDirectory = currentDirectory
+            if (!DirectoryManager.currentDirectory.getSubDirectory(directory)) {
+                DirectoryManager.currentDirectory = currentDirectory
                 return [
                     `cd: ${args[0]}: No such file or directory`
                 ]
 
             }
-            if (Directory.currentDirectory.getSubDirectory(directory).isFile()) {
-                Directory.currentDirectory = currentDirectory
+            if (DirectoryManager.currentDirectory.getSubDirectory(directory).isFile()) {
+                DirectoryManager.currentDirectory = currentDirectory
                 return [
                     `cd: ${args[0]}: Not a directory`
                 ]
             }
-            Directory.changeDir(directory)
+            DirectoryManager.changeDir(directory)
         }
         return []
     }
@@ -257,7 +242,7 @@ class Commands {
                 "mkdir: missing operand"
             ]
         }
-        Directory.makeDir(args)
+        DirectoryManager.makeDir(args)
         return []
     }
 
@@ -267,7 +252,7 @@ class Commands {
                 "touch: missing file operand"
             ]
         }
-        Directory.makeFile(args)
+        DirectoryManager.makeFile(args)
         return []
     }
 
@@ -311,9 +296,7 @@ class Commands {
         const downloadLink = document.createElement("a");
         downloadLink.href = fileUrl;
         downloadLink.download = "CV";
-        document.body.appendChild(downloadLink);
         downloadLink.click();
-        document.body.removeChild(downloadLink);
         return ["Downloading CV..."]
     }
 
@@ -343,7 +326,7 @@ class Commands {
             ]
         }
 
-        let output = Directory.remove(args)
+        let output = DirectoryManager.remove(args)
         return output
     }
 
@@ -354,7 +337,7 @@ class Commands {
             ]
         }
 
-        let output = Directory.getContent(args)
+        let output = DirectoryManager.getContent(args)
         return output
     }
 
@@ -406,7 +389,7 @@ class Commands {
     static triggerWrongHelp() {
         return [
             "You almost got it!",
-            {"message": "Type help for a list of supported commands", "prompt": Directory.getPrompt()}
+            {"message": "Type help for a list of supported commands", "prompt": DirectoryManager.getPrompt()}
         ]
     }
 
@@ -421,7 +404,7 @@ class Commands {
         terminal.setState({
             stdout: [
                 ...terminal.state.stdout,
-                {id: terminal.state.stdout.length, stdout: terminal.state.stdin, prompt: Directory.getPrompt()},
+                {id: terminal.state.stdout.length, stdout: terminal.state.stdin, prompt: DirectoryManager.getPrompt()},
                 ...output.map((line, i) => {
                     return ({
                         id: terminal.state.stdout.length + i + 1,
@@ -431,7 +414,7 @@ class Commands {
                 }),
             ]
         });
-        Directory.updatePrompt()
+        DirectoryManager.updatePrompt()
     }
 
 

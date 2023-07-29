@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Line from "./Line";
 import "./Terminal.css";
 import Commands from "./Commands";
-import Directory from "./Directory";
+import DirectoryManager from "./DirectoryManager";
 import {handleAutocomplete} from "./autocomplete";
 
 class Terminal extends Component {
@@ -15,7 +15,7 @@ class Terminal extends Component {
                 {
                     id: 0,
                     stdout: "Type 'help' for a list of supported commands",
-                    prompt: Directory.getPrompt(),
+                    prompt: DirectoryManager.getPrompt(),
                 },
             ],
             theme: "dark",
@@ -62,14 +62,18 @@ class Terminal extends Component {
             event.preventDefault();
             if (this.state.isTouchDevice) {
                 let textarea = document.getElementById("textarea-touch")
-                this.state.stdin = textarea.value.trim()
+                this.setState({stdin: textarea.value.trim()})
                 textarea.value = ""
             }
             Commands.handleCommands(this);
 
         } else if (key === "ArrowUp") {
+            event.preventDefault();
+            event.stopPropagation();
             this.setState({stdin: Commands.getHistory(-1)});
         } else if (key === "ArrowDown") {
+            event.preventDefault();
+            event.stopPropagation();
             this.setState({stdin: Commands.getHistory(1)});
         } else if (key === "ArrowLeft") {
             this.setState((prevState) => ({
@@ -100,7 +104,7 @@ class Terminal extends Component {
                 <Line
                     stdout={this.state.stdin}
                     current={true}
-                    prompt={Directory.getPrompt()}
+                    prompt={DirectoryManager.getPrompt()}
                     theme={this.state.theme}
                     cursorPosition={this.state.cursorPosition}
                     isTouchDevice={this.state.isTouchDevice}

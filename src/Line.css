@@ -30,6 +30,7 @@
 
 .line {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .file {

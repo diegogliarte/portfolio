@@ -1,5 +1,3 @@
-
-
 class Blob  {
 
     constructor(name, parent, type) {
@@ -28,12 +26,9 @@ class Blob  {
             return this.parent !== null ? this.parent : this
         }
 
-        for (let subDirectory of this.subDirectories) {
-            if (subDirectory.name === name) {
-                return subDirectory
-            }
-        }
-        return null
+        const subDirectory = this.subDirectories.find(subDirectory => subDirectory.name === name);
+
+        return subDirectory || null
     }
 
     isFile() {

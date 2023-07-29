@@ -1,10 +1,22 @@
 import Blob from "./Blob";
 
 
-class Directory {
+class DirectoryManager {
 
     static currentDirectory = new Blob("~", null, "folder")
-    static prompt = Directory.currentDirectory.prompt
+
+    static init() {
+        this.makeDir(["life"]);
+        this.changeDir("life");
+
+        let meaning = new Blob("meaning.txt", this.currentDirectory, "file");
+        meaning.content = 42;
+        this.currentDirectory.addBlob(meaning);
+
+        this.changeDir("..");
+
+        this.prompt = this.currentDirectory.prompt
+    }
 
     static changeDir(directory) {
         if (directory === "..") {
@@ -52,8 +64,8 @@ class Directory {
             } else {
                 output.push(`touch: cannot touch '${name}': No such file or directory`)
             }
-
         }
+        return output
     }
 
     static isCompoundDirectoryValid(name) {
@@ -96,7 +108,6 @@ class Directory {
         this.prompt = this.currentDirectory.prompt
     }
 
-
 }
 
-export default Directory
+export default DirectoryManager
