@@ -1,0 +1,14 @@
+#terminal {
+    padding: 1rem;
+}
+
+.light {
+    color: var(--color-black) !important;
+    background-color: var(--color-white) !important;
+}
+
+body.matrix *, body.matrix {
+    color: var(--color-green-matrix);
+    background-color: black !important;
+}
+

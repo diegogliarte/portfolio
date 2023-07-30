@@ -1,5 +1,5 @@
-import DirectoryManager from "../DirectoryManager";
-import Blob from "../Blob";
+import DirectoryManager from "../terminal/DirectoryManager";
+import Blob from "../terminal/Blob";
 
 describe("Directory tests", () => {
     beforeEach(() => {

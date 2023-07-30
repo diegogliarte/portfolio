@@ -9,6 +9,7 @@ class Terminal extends Component {
     constructor(props) {
         super(props);
 
+
         this.state = {
             stdin: "",
             stdout: [
@@ -18,17 +19,19 @@ class Terminal extends Component {
                     prompt: DirectoryManager.getPrompt(),
                 },
             ],
-            theme: "dark",
+            theme: props.theme,
             cursorPosition: 0,
             isTouchDevice: false
         };
 
         this.handleKeyPress = this.handleKeyPress.bind(this);
         this.themes = ["dark", "light", "matrix"]
+
     }
 
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
+        Commands.setTerminalTheme(this, this.props.theme)
 
         const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
         this.setState({isTouchDevice});
@@ -92,7 +95,7 @@ class Terminal extends Component {
 
     render() {
         return (
-            <div className="terminal" id="terminal">
+            <div id="terminal">
                 {this.state.stdout.map((line) => (
                     <Line
                         key={line.id}

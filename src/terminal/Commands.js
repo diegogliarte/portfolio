@@ -375,15 +375,19 @@ class Commands {
                 "theme: too many arguments"
             ]
         } else if (terminal.themes.includes(args[0])) {
-            terminal.setState({theme: args[0]})
-            document.body.classList.remove(terminal.state.theme)
-            document.body.classList.add(args[0])
+            Commands.setTerminalTheme(terminal, args[0]);
             return []
         } else {
             return [
                 "theme: invalid theme. Currently 'dark', 'light' and 'matrix' available"
             ]
         }
+    }
+
+    static setTerminalTheme(terminal, theme) {
+        terminal.setState({theme: theme})
+        document.body.classList.remove(terminal.state.theme)
+        document.body.classList.add(theme)
     }
 
     static triggerWrongHelp() {

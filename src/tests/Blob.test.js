@@ -1,4 +1,4 @@
-import Blob from "../Blob";
+import Blob from "../terminal/Blob";
 
 describe("Blob tests", () => {
     let child, parent

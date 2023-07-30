@@ -1,7 +1,7 @@
 import React from 'react';
-import Commands from '../Commands';
+import Commands from '../terminal/Commands';
 import {fireEvent, render} from "@testing-library/react";
-import DirectoryManager from "../DirectoryManager";
+import DirectoryManager from "../terminal/DirectoryManager";
 
 describe('Commands test', () => {
     it('should add output to stdout when output is not null', () => {

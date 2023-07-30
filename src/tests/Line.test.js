@@ -1,6 +1,6 @@
 import React from 'react';
 import {render, screen, waitFor} from '@testing-library/react';
-import Line from '../Line';
+import Line from '../terminal/Line';
 
 describe('Line tests', () => {
     it('should renders prompt when passed a prompt prop', () => {

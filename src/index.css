@@ -17,9 +17,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+body.dark {
   background-color: var(--color-black);
   color: var(--color-white);
-
 }
 
 code {
@@ -38,14 +42,43 @@ html::-webkit-scrollbar { /* WebKit */
   height: 0;
 }
 
-.light {
-  color: var(--color-black) !important;
-  background-color: var(--color-white) !important;
+
+.select-mode {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25vh;
+  font-family: 'Ubuntu Mono', monospace;
+  gap: 2rem;
 }
 
-body.matrix *, body.matrix {
-  color: var(--color-green-matrix);
-  background-color: black !important;
+.select-button {
+  font-size: 3rem;
+  background-color: var(--color-white);
+  color: var(--color-black);
+  cursor: pointer;
+  border-radius: 5px;
+  border: 2px solid  var(--color-black);
 }
+
+.select-button:hover {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+  -moz-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  -o-transform: scale(1.1);
+  transition: transform 0.4s ease-out;
+
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: 2px solid  var(--color-white);
+}
+
+
+
+
+
+
 
 
