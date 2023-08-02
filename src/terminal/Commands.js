@@ -261,7 +261,7 @@ class Commands {
             "Most of my projects can be found on my <a target='_blank' href='https://github.com/diegogliarte'>" +
             "GitHub</a>. Some of the most interesting ones are:",
             "",
-            "<a target='_blank' href='https://github.com/diegogliarte/portfolio'>Terminal Portfolio</a>",
+            "<a target='_blank' href='https://github.com/diegogliarte/portfolio'>Terminal Windows</a>",
             "The website you are browsing right now!",
             ">> React, JS, CSS, HTML, Unix <<",
             "",

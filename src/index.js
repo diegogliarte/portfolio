@@ -6,7 +6,7 @@ import 'normalize.css';
 
 import Terminal from './terminal/Terminal';
 import DirectoryManager from "./terminal/DirectoryManager";
-import Portfolio from "./simplePortfolio/Portfolio";
+import Windows from "./windows/Windows";
 
 DirectoryManager.init();
 
@@ -19,7 +19,7 @@ function App() {
 
                 {/* Render content based on the selected mode */}
                 {mode === "simple" ? (
-                    <Portfolio />
+                    <Windows/>
                 ) : mode ==="terminal" ? (
                     <Terminal theme={"dark"}/>
                 ) : (
