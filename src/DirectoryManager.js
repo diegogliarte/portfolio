@@ -1,19 +1,51 @@
-import Blob from "./Blob";
+import BlobManager from "./terminal/BlobManager";
 
 
 class DirectoryManager {
 
-    static currentDirectory = new Blob("~", null, "folder")
+    static currentDirectory = new BlobManager("~", null, "folder")
 
     static init() {
+        // prompt = /
+        this.makeDir(["windows-xp", "ubuntu"])
+
+        // prompt = /ubuntu
+        this.changeDir("ubuntu")
         this.makeDir(["life"]);
+        // prompt = /ubuntu/life
         this.changeDir("life");
 
-        let meaning = new Blob("meaning.txt", this.currentDirectory, "file");
+        let meaning = new BlobManager("meaning.txt", this.currentDirectory, "file");
         meaning.content = 42;
         this.currentDirectory.addBlob(meaning);
 
+        // prompt = /ubuntu
         this.changeDir("..");
+        // prompt = /
+        this.changeDir("..");
+        // prompt = /windows-xp
+        this.changeDir("windows-xp")
+
+        let folder1 = new BlobManager("folder1", this.currentDirectory, "folder");
+
+        this.currentDirectory.addBlob(new BlobManager("file1.txt", this.currentDirectory, "file"))
+        this.currentDirectory.addBlob(new BlobManager("file2.txt", this.currentDirectory, "file"))
+        this.currentDirectory.addBlob(new BlobManager("file3.txt", this.currentDirectory, "file"))
+        this.currentDirectory.addBlob(new BlobManager("cmd.exe", this.currentDirectory, "terminal"))
+        this.currentDirectory.addBlob(folder1)
+
+        // prompt = /windows-xp/folder1
+        this.changeDir("folder1")
+
+        this.currentDirectory.addBlob(new BlobManager("file4.txt", this.currentDirectory, "file"))
+        this.currentDirectory.addBlob(new BlobManager("file5.txt", this.currentDirectory, "file"))
+
+        // prompt = /windows-xp
+        this.changeDir("..");
+        // prompt = /
+        this.changeDir("..");
+        // prompt = /ubuntu
+        this.changeDir("ubuntu");
 
         this.prompt = this.currentDirectory.prompt
     }
@@ -31,7 +63,7 @@ class DirectoryManager {
 
     static makeDir(names) {
         for (let name of names) {
-            const folder = new Blob(name, this.currentDirectory, "folder")
+            const folder = new BlobManager(name, this.currentDirectory, "folder")
             this.currentDirectory.addBlob(folder)
         }
     }
@@ -59,7 +91,7 @@ class DirectoryManager {
 
             let subDirectory = this.isCompoundDirectoryValid(directories.join("/"))
             if (subDirectory) {
-                const file = new Blob(fileName, subDirectory, "file")
+                const file = new BlobManager(fileName, subDirectory, "file")
                 subDirectory.addBlob(file)
             } else {
                 output.push(`touch: cannot touch '${name}': No such file or directory`)

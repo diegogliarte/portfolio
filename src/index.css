@@ -18,15 +18,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body.light {
-  background-color: var(--color-white);
-  color: var(--color-black);
-}
 
-body.dark {
-  background-color: var(--color-black);
-  color: var(--color-white);
-}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -76,6 +68,19 @@ html::-webkit-scrollbar { /* WebKit */
   color: var(--color-white);
   border: 2px solid  var(--color-white);
 }
+
+
+/* index.css */
+.windows-bg {
+  /*background: url("../public/windows-xp/wallpaper.jpg");*/
+  /*color: var(--color-black);*/
+}
+
+.terminal-bg {
+  /*background: transparent;*/
+  /* You can optionally set background properties for Terminal mode here */
+}
+
 
 
 

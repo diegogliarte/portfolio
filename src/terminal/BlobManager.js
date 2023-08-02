@@ -1,4 +1,4 @@
-class Blob  {
+class BlobManager {
 
     constructor(name, parent, type) {
         this.name = name
@@ -41,4 +41,4 @@ class Blob  {
 
 }
 
-export default Blob
+export default BlobManager

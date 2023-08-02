@@ -1,9 +1,9 @@
-import DirectoryManager from "../terminal/DirectoryManager";
-import Blob from "../terminal/Blob";
+import DirectoryManager from "../DirectoryManager";
+import BlobManager from "../terminal/BlobManager";
 
 describe("Directory tests", () => {
     beforeEach(() => {
-        DirectoryManager.currentDirectory = new Blob("~", null, "folder")
+        DirectoryManager.currentDirectory = new BlobManager("~", null, "folder")
         DirectoryManager.prompt = DirectoryManager.currentDirectory.prompt
     })
 

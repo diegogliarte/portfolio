@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Line from "./Line";
 import "./Terminal.css";
 import Commands from "./Commands";
-import DirectoryManager from "./DirectoryManager";
+import DirectoryManager from "../DirectoryManager";
 import {handleAutocomplete} from "./autocomplete";
 
 class Terminal extends Component {

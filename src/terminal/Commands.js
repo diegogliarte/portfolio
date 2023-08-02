@@ -1,5 +1,6 @@
-import DirectoryManager from "./DirectoryManager";
+import DirectoryManager from "../DirectoryManager";
 import {autocompleteFolders, autocompleteFoldersAndFiles, autocompleteTheme} from "./autocomplete";
+import AppContext from "../AppContext";
 
 class Commands {
 
@@ -70,6 +71,9 @@ class Commands {
         '"help"': {
             "trigger": Commands.triggerWrongHelp,
             "hidden": true
+        },
+        "exit": {
+            "trigger": Commands.triggerExit,
         },
 
 
@@ -386,11 +390,21 @@ class Commands {
 
     static setTerminalTheme(terminal, theme) {
         terminal.setState({theme: theme})
-        document.body.classList.remove(terminal.state.theme)
-        document.body.classList.add(theme)
+        const terminalElement = document.getElementById("terminal")
+        terminalElement.classList.remove(terminal.state.theme)
+        terminalElement.classList.add(theme)
     }
 
     static triggerWrongHelp() {
+        return [
+            "You almost got it!",
+            {"message": "Type help for a list of supported commands", "prompt": DirectoryManager.getPrompt()}
+        ]
+    }
+
+    static triggerExit(terminal) {
+        Commands.setTerminalTheme(terminal, "light")
+        AppContext.setMode("windows-xp")
         return [
             "You almost got it!",
             {"message": "Type help for a list of supported commands", "prompt": DirectoryManager.getPrompt()}

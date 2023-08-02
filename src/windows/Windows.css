@@ -1,7 +1,11 @@
 html {
-    background: url("../../public/windows/wallpaper.jpg")
+    /*background: url("../../public/windows-xp/wallpaper.jpg");*/
+}
+
+#root {
+    width: 100%;
 }
 
 #windows {
-    background: transparent;
+    font-family: Tahoma,Verdana,Segoe,sans-serif;
 }

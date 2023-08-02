@@ -1,11 +1,11 @@
-import Blob from "../terminal/Blob";
+import BlobManager from "../terminal/BlobManager";
 
-describe("Blob tests", () => {
+describe("BlobManager tests", () => {
     let child, parent
 
     beforeEach(() => {
-        parent = new Blob("parent", null, "folder")
-        child = new Blob("child", parent, "file")
+        parent = new BlobManager("parent", null, "folder")
+        child = new BlobManager("child", parent, "file")
         parent.addBlob(child)
     })
 

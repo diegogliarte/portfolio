@@ -1,4 +1,4 @@
-import DirectoryManager from "./DirectoryManager";
+import DirectoryManager from "../DirectoryManager";
 import Commands from "./Commands";
 
 export function handleAutocomplete(terminal) {
