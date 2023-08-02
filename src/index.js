@@ -16,18 +16,7 @@ function App() {
     return (
         <React.StrictMode>
             <div>
-
-                {/* Render content based on the selected mode */}
-                {mode === "simple" ? (
-                    <Portfolio />
-                ) : mode ==="terminal" ? (
                     <Terminal theme={"dark"}/>
-                ) : (
-                    <div className={"select-mode"}>
-                        <button className={"select-button"} onClick={() => setMode("simple")}>Simple</button>
-                        <button className={"select-button"} onClick={() => setMode("terminal")}>Terminal</button>
-                    </div>
-                )}
             </div>
         </React.StrictMode>
     );
