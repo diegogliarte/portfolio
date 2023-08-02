@@ -11,22 +11,18 @@ import Windows from "./windows/Windows";
 DirectoryManager.init();
 
 function App() {
-    const [mode, setMode] = useState("");
+    const [mode, setMode] = useState("windows");
 
     return (
         <React.StrictMode>
             <div>
-
                 {/* Render content based on the selected mode */}
-                {mode === "simple" ? (
+                {mode === "windows" ? (
                     <Windows/>
                 ) : mode ==="terminal" ? (
                     <Terminal theme={"dark"}/>
                 ) : (
-                    <div className={"select-mode"}>
-                        <button className={"select-button"} onClick={() => setMode("simple")}>Simple</button>
-                        <button className={"select-button"} onClick={() => setMode("terminal")}>Terminal</button>
-                    </div>
+                    <div></div>
                 )}
             </div>
         </React.StrictMode>

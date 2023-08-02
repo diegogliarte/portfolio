@@ -1,0 +1,9 @@
+.blob {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-purple); /* Blue color, you can change it to your preference */
+    border-radius: 50%; /* Make the div round to form a circle */
+    position: absolute;
+    transform: translate(-50%, -50%); /* Center the blob based on its center position */
+    cursor: pointer;
+}
