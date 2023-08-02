@@ -11,6 +11,10 @@ class AppContext {
         AppContext.setMode(value)
     }
 
+    static setTheme(theme) {
+        this.theme = theme
+    }
+
 
 }
 

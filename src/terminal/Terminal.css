@@ -3,19 +3,17 @@
     padding: 1rem;
 }
 
-#terminal.light {
-    background-color: var(--color-white);
-    color: var(--color-black);
-}
-
-#terminal.dark, #terminal.dark body {
+.terminal-bg {
     background-color: var(--color-black);
     color: var(--color-white);
 }
 
+.terminal-bg.light {
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
 
-
-#terminal.matrix *, #terminal.matrix {
+.terminal-bg.matrix *, .terminal-bg.matrix {
     color: var(--color-green-matrix);
     background-color: black;
 }

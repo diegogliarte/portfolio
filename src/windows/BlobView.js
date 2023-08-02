@@ -4,12 +4,25 @@ import "./BlobView.css";
 import AppContext from "../AppContext";
 
 class BlobView extends React.Component {
-    // handleMouseDown = () => {
-    //     const {directory} = this.props;
-    //     if (directory.type === "terminal") {
-    //         AppContext.setMode("terminal")
-    //     }
-    // };
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            drag: false
+        }
+
+
+    }
+
+    handleMouseUp = () => {
+        if (this.state.drag) return;
+
+        const {directory} = this.props;
+        if (directory.type === "terminal") {
+            AppContext.setMode("terminal")
+        }
+    };
 
     render() {
         const {x, y, onMouseDown, blobSize, directory} = this.props;
@@ -24,11 +37,16 @@ class BlobView extends React.Component {
             <div
                 className="blobView"
                 style={blobStyle}
-                onMouseDown={onMouseDown}
+                onMouseDown={(event) => {
+                    this.setState({ drag: false });
+                    onMouseDown(event);
+                }}
+                onMouseMove={() => this.setState({ drag: true })}
+                onMouseUp={this.handleMouseUp}
             >
                 <img src={"windows-xp/icons/" +
                     (directory.type === "terminal" ? "cmd.png" : "explorer.png")}
-                     alt="Folder image"/>
+                     alt="Folder"/>
                 <div className="blobViewName">{directory.name}</div>
             </div>
         );

@@ -1,5 +1,6 @@
-html {
-    /*background: url("../../public/windows-xp/wallpaper.jpg");*/
+.windows-bg {
+    background: url("../../public/windows-xp/wallpaper.jpg");
+    color: black;
 }
 
 #root {
@@ -9,3 +10,5 @@ html {
 #windows {
     font-family: Tahoma,Verdana,Segoe,sans-serif;
 }
+
+

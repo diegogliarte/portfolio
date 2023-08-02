@@ -18,12 +18,15 @@ export function handleAutocomplete(terminal) {
     } else {
         const autocompleteMethod = Commands.commands[command]["autocomplete"] || Commands.commands["default"]["autocomplete"]
         autocompleteElements = autocompleteMethod(terminal, args)
+
         if (autocompleteElements && autocompleteElements.length === 1) {
             let element = autocompleteElements[0]
             terminal.setState({stdin: `${command} ${element}`, cursorPosition: `${command} ${element}`.length})
             output = null
         } else if (autocompleteElements) {
             output = [autocompleteElements.join("  ")]
+        } else {
+            return
         }
     }
     Commands.executeCommand(terminal, output)
@@ -57,17 +60,15 @@ export function autocompleteBlob(args, includeFile = true, includeFolder = true)
             path += element + (currentDirectory.getSubDirectory(element).isFolder() ? "/" : "")
             currentDirectory = currentDirectory.getSubDirectory(element)
         } else if (autocompleteElements) {
-            return [
-                autocompleteElements.map(directory => {
+            return autocompleteElements.map(directory => {
                     let blob = currentDirectory.getSubDirectory(directory)
                     return `<span class=${blob.type}>${blob.name}</span>`
-                }).join("  ")
-            ]
+                })
+
         } else {
             return null
         }
     }
-
     return [path]
 }
 

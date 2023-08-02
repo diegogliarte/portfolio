@@ -28,7 +28,7 @@ function App() {
                 {mode === "windows-xp" ? (
                     <Windows/>
                 ) : mode ==="terminal" ? (
-                    <Terminal theme={"dark"}/>
+                    <Terminal/>
                 ) : (
                     <div></div>
                 )}

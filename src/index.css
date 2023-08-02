@@ -70,16 +70,7 @@ html::-webkit-scrollbar { /* WebKit */
 }
 
 
-/* index.css */
-.windows-bg {
-  /*background: url("../public/windows-xp/wallpaper.jpg");*/
-  /*color: var(--color-black);*/
-}
 
-.terminal-bg {
-  /*background: transparent;*/
-  /* You can optionally set background properties for Terminal mode here */
-}
 
 
 

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import "./Line.css"
-import {logDOM} from "@testing-library/react";
 
 function Line(props) {
     const [showCursor, setShowCursor] = useState(true);

@@ -4,6 +4,7 @@ import "./Terminal.css";
 import Commands from "./Commands";
 import DirectoryManager from "../DirectoryManager";
 import {handleAutocomplete} from "./autocomplete";
+import AppContext from "../AppContext";
 
 class Terminal extends Component {
     constructor(props) {
@@ -19,7 +20,6 @@ class Terminal extends Component {
                     prompt: DirectoryManager.getPrompt(),
                 },
             ],
-            theme: props.theme,
             cursorPosition: 0,
             isTouchDevice: false
         };
@@ -31,7 +31,6 @@ class Terminal extends Component {
 
     componentDidMount() {
         document.addEventListener("keydown", this.handleKeyPress);
-        Commands.setTerminalTheme(this, this.props.theme)
 
         const isTouchDevice = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
         this.setState({isTouchDevice});
@@ -101,14 +100,14 @@ class Terminal extends Component {
                         key={line.id}
                         stdout={line.stdout}
                         prompt={line.prompt}
-                        theme={this.state.theme}
+                        theme={AppContext.theme}
                     />
                 ))}
                 <Line
                     stdout={this.state.stdin}
                     current={true}
                     prompt={DirectoryManager.getPrompt()}
-                    theme={this.state.theme}
+                    theme={AppContext.theme}
                     cursorPosition={this.state.cursorPosition}
                     isTouchDevice={this.state.isTouchDevice}
                 />

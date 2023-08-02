@@ -184,7 +184,7 @@ class Commands {
 
     static triggerWhoAmICommand() {
         return [
-            "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with almost " +
+            "I am Diego González, a Software Developer located in Spain. Currently a CS and Business student with almost " +
             "2 years of professional experience as a software developer. Always in the process of improving."
         ]
     }
@@ -330,8 +330,7 @@ class Commands {
             ]
         }
 
-        let output = DirectoryManager.remove(args)
-        return output
+        return DirectoryManager.remove(args)
     }
 
     static triggerCat(terminal, args) {
@@ -341,8 +340,7 @@ class Commands {
             ]
         }
 
-        let output = DirectoryManager.getContent(args)
-        return output
+        return DirectoryManager.getContent(args)
     }
 
     static triggerSecret(terminal, args) {
@@ -389,10 +387,9 @@ class Commands {
     }
 
     static setTerminalTheme(terminal, theme) {
-        terminal.setState({theme: theme})
-        const terminalElement = document.getElementById("terminal")
-        terminalElement.classList.remove(terminal.state.theme)
-        terminalElement.classList.add(theme)
+        document.documentElement.classList.remove(AppContext.theme)
+        AppContext.setTheme(theme)
+        document.documentElement.classList.add(theme)
     }
 
     static triggerWrongHelp() {
@@ -402,8 +399,7 @@ class Commands {
         ]
     }
 
-    static triggerExit(terminal) {
-        Commands.setTerminalTheme(terminal, "light")
+    static triggerExit() {
         AppContext.setMode("windows-xp")
         return [
             "You almost got it!",
@@ -414,7 +410,6 @@ class Commands {
 
     static executeCommand(terminal, output) {
         Commands.historyIndex = Commands.history.length
-
         if (output === null) {
             return
         }

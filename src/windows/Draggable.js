@@ -49,6 +49,7 @@ class Draggable extends Component {
 
     handleMouseMove = (event) => {
         const {isDragging, initialX, initialY} = this.state;
+
         if (isDragging) {
             const currentX = event.clientX - initialX;
             const currentY = event.clientY - initialY;
@@ -72,10 +73,9 @@ class Draggable extends Component {
     render() {
         const {currentX, currentY, isDragging, snappedX, snappedY} = this.state;
         const {render} = this.props;
-
         return (
             <>
-                {isDragging && (
+                {isDragging && snappedX !== undefined && snappedY !== undefined && (
                     <PhantomBlob
                         x={snappedX}
                         y={snappedY}
