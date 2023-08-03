@@ -80,6 +80,7 @@ class Draggable extends Component {
                         x={snappedX}
                         y={snappedY}
                         blobSize={this.props.blobSize}
+                        directory={this.props.directory}
                     />
                 )}
                 {render({
@@ -92,18 +93,21 @@ class Draggable extends Component {
     }
 }
 
-const PhantomBlob = ({ x, y, blobSize }) => {
+const PhantomBlob = ({ x, y, blobSize, directory }) => {
     const phantomStyle = {
         left: `${x}px`,
         top: `${y}px`,
         width: `${blobSize}px`,
         height: `${blobSize}px`,
         opacity: 0.5, // Adjust opacity as needed
-        background: "blue", // Adjust background color as needed
         position: "absolute",
     };
 
-    return <div className="blobView" style={phantomStyle}></div>;
+    return <div className="blobView" style={phantomStyle}>
+        <img src={"windows-xp/icons/" +
+            (directory.type === "terminal" ? "cmd.png" : "explorer.png")}
+             alt="Folder"/>
+    </div>;
 };
 
 

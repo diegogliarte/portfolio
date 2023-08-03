@@ -1,17 +1,66 @@
 .screen {
     background-color: transparent;
-    padding: 1rem;
     display: flex;
+    position: absolute;
 }
 
 #desktopScreen {
-    position: absolute;
     width: 100%;
     height: 100%;
-
+    background-color: transparent;
 }
 
-button {
-    width: 200px;
-    height: 200px;
+.screenFolder {
+    width: 50%;
+    height: 50%;
+    background-color: white;
+    color: black;
+    text-shadow: none;
+    border: 1px solid black;
 }
+
+.folder-topbar {
+    position: absolute;
+    background-color: var(--color-blue);
+    height: 25px;
+    top: 0;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modifier {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.folder-modifiers-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+.minimize-folder {
+    background-color: darkblue;
+    color: white;
+}
+
+.maximize-folder {
+    background-color: darkblue;
+    color: white;
+}
+
+.close-folder {
+    background-color: red;
+    color: white;
+}
+

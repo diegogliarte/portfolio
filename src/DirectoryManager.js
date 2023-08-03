@@ -27,12 +27,14 @@ class DirectoryManager {
         this.changeDir("windows-xp")
 
         let folder1 = new BlobManager("folder1", this.currentDirectory, "folder");
+        let folder2 = new BlobManager("folder2", this.currentDirectory, "folder");
 
         this.currentDirectory.addBlob(new BlobManager("file1.txt", this.currentDirectory, "file"))
         this.currentDirectory.addBlob(new BlobManager("file2.txt", this.currentDirectory, "file"))
         this.currentDirectory.addBlob(new BlobManager("file3.txt", this.currentDirectory, "file"))
         this.currentDirectory.addBlob(new BlobManager("cmd.exe", this.currentDirectory, "terminal"))
         this.currentDirectory.addBlob(folder1)
+        this.currentDirectory.addBlob(folder2)
 
         // prompt = /windows-xp/folder1
         this.changeDir("folder1")

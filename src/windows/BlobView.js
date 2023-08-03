@@ -11,8 +11,6 @@ class BlobView extends React.Component {
         this.state = {
             drag: false
         }
-
-
     }
 
     handleMouseUp = () => {
@@ -21,6 +19,8 @@ class BlobView extends React.Component {
         const {directory} = this.props;
         if (directory.type === "terminal") {
             AppContext.setMode("terminal")
+        } else if (directory.type === "folder") {
+            AppContext.addWindow(directory)
         }
     };
 
@@ -62,6 +62,7 @@ export default function BlobWithDraggable(props) {
             spacing={spacing}
             screenWidth={screenWidth}
             screenHeight={screenHeight}
+            directory={directory}
             render={(dragProps) => <BlobView {...dragProps} directory={directory} />}
         />
     );
