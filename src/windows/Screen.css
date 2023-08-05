@@ -16,12 +16,19 @@
     background-color: white;
     color: black;
     text-shadow: none;
-    border: 1px solid black;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: 5px solid var(--color-windows-xp-folder-dark-blue);
 }
 
 .folder-topbar {
     position: absolute;
-    background-color: var(--color-blue);
+    background-color: var(--color-windows-xp-folder-dark-blue);
+    color: white;
     height: 25px;
     top: 0;
     width: 100%;
@@ -35,17 +42,25 @@
     cursor: pointer;
     width: 20px;
     height: 20px;
-
+    border-radius: 3px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.modifier:hover {
+    filter: brightness(1.2);
+}
+
+.modifier:active {
+    filter: brightness(0.8);
 }
 
 .folder-modifiers-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
+    gap: 2px;
 }
 
 .folder-directory-info {
@@ -62,17 +77,11 @@
 
 
 .minimize-folder {
-    background-color: darkblue;
-    color: white;
 }
 
 .maximize-folder {
-    background-color: darkblue;
-    color: white;
 }
 
 .close-folder {
-    background-color: red;
-    color: white;
 }
 

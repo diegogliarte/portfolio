@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import BlobWithDraggable, {BlobView, getImgFromDirectory} from "./BlobView";
+import {getImgFromDirectory} from "./BlobView";
 
 class Draggable extends Component {
 
@@ -38,6 +38,7 @@ class Draggable extends Component {
     }
 
     handleMouseDown = (event) => {
+        if (!this.props.isDraggable) return;
         event.preventDefault()
         const {currentX, currentY} = this.state;
 

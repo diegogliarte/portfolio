@@ -67,7 +67,7 @@ class BlobView extends React.Component {
 export {getImgFromDirectory};
 
 export default function BlobWithDraggable(props) {
-    const {directory, blobSize, spacing, screenWidth, screenHeight} = props;
+    const {directory, blobSize, spacing, screenWidth, screenHeight, isDraggable} = props;
     return (
         <Draggable
             {...props}
@@ -76,6 +76,7 @@ export default function BlobWithDraggable(props) {
             screenWidth={screenWidth}
             screenHeight={screenHeight}
             directory={directory}
+            isDraggable={isDraggable}
             render={(dragProps) => <BlobView {...dragProps} directory={directory}/>}
         />
     );

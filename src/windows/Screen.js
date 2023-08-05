@@ -39,16 +39,17 @@ class Screen extends Component {
     };
 
     minimizeWindow = (event) => {
-
+        event.stopPropagation()
     }
 
     maximizeWindow = (event) => {
+        event.stopPropagation()
 
     }
 
     closeWindow = (event) => {
-        AppContext.removeWindow(this.props.id)
         event.stopPropagation()
+        AppContext.removeWindow(this.props.id)
     }
 
     handleScreenMouseDown = (event) => {
@@ -87,7 +88,6 @@ class Screen extends Component {
         // TODO Check why this.state.screenWidth and height are undefined
         const maxBlobsInRow = Math.floor(this.state.screenWidth / (blobSize + spacing)) - 1
         const maxBlobsInCol = Math.floor(this.state.screenHeight / (blobSize + spacing)) - 1
-
         return displayDirectory.subDirectories.map((directory, index) => (
             <div key={index}>
                 <BlobWithDraggable
@@ -98,6 +98,7 @@ class Screen extends Component {
                     screenWidth={this.state.screenWidth}
                     screenHeight={this.state.screenHeight}
                     directory={directory}
+                    isDraggable={this.props.isDesktop}
                 />
             </div>
         ));
@@ -124,9 +125,9 @@ class Screen extends Component {
                                 {this.props.displayDirectory.name}
                             </div>
                             <div className="folder-modifiers-container">
-                                <div className="modifier minimize-folder" onMouseDown={this.minimizeWindow}>-</div>
-                                <div className="modifier maximize-folder" onMouseDown={this.maximizeWindow}>+</div>
-                                <div className="modifier close-folder" onMouseDown={this.closeWindow}>X</div>
+                                <img src="windows-xp/icons/minimize.png" className="modifier minimize-folder" onMouseDown={this.minimizeWindow}></img>
+                                <img src="windows-xp/icons/maximize.png" className="modifier maximize-folder" onMouseDown={this.maximizeWindow}></img>
+                                <img src="windows-xp/icons/close.png" className="modifier close-folder" onMouseDown={(event) => event.stopPropagation()} onClick={this.closeWindow}></img>
                             </div>
                         </div>
                         {this.renderBlobs()}

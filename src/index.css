@@ -12,6 +12,8 @@
   --color-windows-xp-taskbar-dark-blue: #235DDB;
   --color-windows-xp-taskbar-light-blue: #0D8CE8;
   --color-windows-xp-taskbar-dark-green: #48AF49;
+  --color-windows-xp-folder-dark-blue: #0055EB;
+  --color-windows-xp-folder-close: #E34C1F;
 }
 
 body {
