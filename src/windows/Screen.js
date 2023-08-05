@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import "./Screen.css";
-import BlobWithDraggable from "./BlobView";
+import BlobWithDraggable, {getImgFromDirectory} from "./BlobView";
 import AppContext from "../AppContext";
 
 class Screen extends Component {
@@ -8,7 +8,7 @@ class Screen extends Component {
         super(props);
         this.state = {
             blobSize: 50,
-            spacing: 20,
+            spacing: 30,
             x: this.props.x,
             y: this.props.y
         };
@@ -37,6 +37,14 @@ class Screen extends Component {
         // Update the state with new screen dimensions
         this.setState({screenWidth, screenHeight});
     };
+
+    minimizeWindow = (event) => {
+
+    }
+
+    maximizeWindow = (event) => {
+
+    }
 
     closeWindow = (event) => {
         AppContext.removeWindow(this.props.id)
@@ -112,12 +120,13 @@ class Screen extends Component {
                     <div className={"screen screenFolder"} ref={this.screenRef} style={screenStyle} onMouseDown={this.handleScreenMouseDown}>
                         <div className="folder-topbar" onMouseDown={this.handleTopbarMouseDown}>
                             <div className="folder-directory-info">
+                                <img src={"windows-xp/icons/" + getImgFromDirectory(this.props.displayDirectory)}/>
                                 {this.props.displayDirectory.name}
                             </div>
-                            <div className="folder-modifiers-container" onMouseDown={this.closeWindow}>
-                                <div className="modifier minimize-folder">-</div>
-                                <div className="modifier maximize-folder">+</div>
-                                <div className="modifier close-folder">X</div>
+                            <div className="folder-modifiers-container">
+                                <div className="modifier minimize-folder" onMouseDown={this.minimizeWindow}>-</div>
+                                <div className="modifier maximize-folder" onMouseDown={this.maximizeWindow}>+</div>
+                                <div className="modifier close-folder" onMouseDown={this.closeWindow}>X</div>
                             </div>
                         </div>
                         {this.renderBlobs()}

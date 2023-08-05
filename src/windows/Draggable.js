@@ -1,6 +1,10 @@
 import React, { Component } from "react";
+import BlobWithDraggable, {BlobView, getImgFromDirectory} from "./BlobView";
 
 class Draggable extends Component {
+
+    topMargin = 30
+
     constructor(props) {
         super(props);
         const {blobSize, spacing} = this.props
@@ -9,7 +13,7 @@ class Draggable extends Component {
             initialX: blobSize / 2,
             initialY: blobSize / 2,
             currentX: (blobSize + this.props.x * (blobSize + spacing)),
-            currentY: (blobSize + this.props.y * (blobSize + spacing)),
+            currentY: (this.topMargin + blobSize + this.props.y * (blobSize + spacing)),
         };
     }
 
@@ -20,7 +24,7 @@ class Draggable extends Component {
         const spaceBetween = blobSize + spacing
 
         const minCoordsLeft = blobSize
-        const minCoordsUp = blobSize
+        const minCoordsUp = this.topMargin + blobSize
 
         const maxBlobsInRow = Math.floor(screenWidth / spaceBetween) - 1
         const maxBlobsInCol = Math.floor(screenHeight / spaceBetween) - 1
@@ -29,7 +33,7 @@ class Draggable extends Component {
         const snappedX = Math.min(blobSize + maxBlobsInRow * spaceBetween, Math.max(minCoordsLeft, blobSize + coordsX * spaceBetween))
 
         const coordsY = Math.floor((currentY - blobSize / 2) / spaceBetween)
-        const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, blobSize + coordsY * spaceBetween))
+        const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, this.topMargin + blobSize + coordsY * spaceBetween))
         return {snappedX, snappedY};
     }
 
@@ -99,14 +103,12 @@ const PhantomBlob = ({ x, y, blobSize, directory }) => {
         top: `${y}px`,
         width: `${blobSize}px`,
         height: `${blobSize}px`,
-        opacity: 0.5, // Adjust opacity as needed
+        opacity: 0.5,
         position: "absolute",
     };
 
     return <div className="blobView" style={phantomStyle}>
-        <img src={"windows-xp/icons/" +
-            (directory.type === "terminal" ? "cmd.png" : "explorer.png")}
-             alt="Folder"/>
+        <img src={"windows-xp/icons/" + getImgFromDirectory(directory)}/>
     </div>;
 };
 

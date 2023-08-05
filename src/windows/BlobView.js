@@ -3,6 +3,16 @@ import Draggable from "./Draggable";
 import "./BlobView.css";
 import AppContext from "../AppContext";
 
+function getImgFromDirectory(directory) {
+    if (directory.type === "terminal") return "cmd.png"
+    if (directory.type === "folder") return "folder.png"
+    if (directory.type === "file") {
+        if (directory.name.endsWith("txt")) return "text.png"
+    }
+
+    return "default.png"
+}
+
 class BlobView extends React.Component {
 
     constructor(props) {
@@ -24,6 +34,8 @@ class BlobView extends React.Component {
         }
     };
 
+
+
     render() {
         const {x, y, onMouseDown, blobSize, directory} = this.props;
         const blobStyle = {
@@ -38,14 +50,13 @@ class BlobView extends React.Component {
                 className="blobView"
                 style={blobStyle}
                 onMouseDown={(event) => {
-                    this.setState({ drag: false });
+                    this.setState({drag: false});
                     onMouseDown(event);
                 }}
-                onMouseMove={() => this.setState({ drag: true })}
+                onMouseMove={() => this.setState({drag: true})}
                 onMouseUp={this.handleMouseUp}
             >
-                <img src={"windows-xp/icons/" +
-                    (directory.type === "terminal" ? "cmd.png" : "explorer.png")}
+                <img src={"windows-xp/icons/" + getImgFromDirectory(directory)}
                      alt="Folder"/>
                 <div className="blobViewName">{directory.name}</div>
             </div>
@@ -53,8 +64,10 @@ class BlobView extends React.Component {
     }
 }
 
+export {getImgFromDirectory};
+
 export default function BlobWithDraggable(props) {
-    const { directory, blobSize, spacing, screenWidth, screenHeight } = props;
+    const {directory, blobSize, spacing, screenWidth, screenHeight} = props;
     return (
         <Draggable
             {...props}
@@ -63,7 +76,7 @@ export default function BlobWithDraggable(props) {
             screenWidth={screenWidth}
             screenHeight={screenHeight}
             directory={directory}
-            render={(dragProps) => <BlobView {...dragProps} directory={directory} />}
+            render={(dragProps) => <BlobView {...dragProps} directory={directory}/>}
         />
     );
 }

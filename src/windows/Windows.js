@@ -26,7 +26,7 @@ function Windows() {
 
     return (
         <div id="windows">
-            <Screen displayDirectory={DirectoryManager.currentDirectory.parent.getSubDirectory("windows-xp")}
+            <Screen displayDirectory={DirectoryManager.windowsXPDirectory}
                     isDesktop={true}/>
             {renderOpenedScreens()}
             <Taskbar/>

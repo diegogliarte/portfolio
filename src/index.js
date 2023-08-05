@@ -26,9 +26,9 @@ function App() {
             <div >
                 {/* Render content based on the selected mode */}
                 {mode === "windows-xp" ? (
-                    <Windows/>
+                    <Windows key={"windows"}/>
                 ) : mode ==="terminal" ? (
-                    <Terminal/>
+                    <Terminal key={"terminal"}/>
                 ) : (
                     <div></div>
                 )}

@@ -1,11 +1,43 @@
 #taskbar {
-    height: 50px;
+    height: 30px;
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: var(--color-dark-blue);
-
+    background-color: var(--color-windows-xp-taskbar-dark-blue);
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.start-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100px;
+    cursor: pointer;
+    text-shadow: none;
+    border-radius: 5px;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    background: var(--color-windows-xp-taskbar-dark-green)
+    linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.3));
+
+}
+
+.start-menu img {
+    width: 20px;
+    margin: 0;
+}
+
+.current-time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85px;
+    height: 100%;
+    background-color: var(--color-windows-xp-taskbar-light-blue);
+    text-shadow: none;
+
 }

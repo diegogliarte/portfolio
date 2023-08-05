@@ -48,6 +48,18 @@
     gap: 1rem;
 }
 
+.folder-directory-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    font-family: "Trebuchet MS", serif;
+}
+
+.folder-directory-info img {
+    width: 20px;
+}
+
 
 .minimize-folder {
     background-color: darkblue;

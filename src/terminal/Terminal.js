@@ -9,8 +9,6 @@ import AppContext from "../AppContext";
 class Terminal extends Component {
     constructor(props) {
         super(props);
-
-
         this.state = {
             stdin: "",
             stdout: [

@@ -27,7 +27,10 @@ class Taskbar extends Component {
     render() {
         return (
             <div id="taskbar">
-                <div className="start-menu">Start</div>
+                <div className="start-menu">
+                    <img src="/windows-xp/icons/windows-xp.png" alt="Start windows-xp"/>
+                    <div className="start-menu-name">start</div>
+                </div>
                 <div className="taskbar-folders">Folders</div>
                 <div className="current-time">{this.state.currentTime}</div>
             </div>

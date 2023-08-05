@@ -4,10 +4,13 @@ import BlobManager from "./terminal/BlobManager";
 class DirectoryManager {
 
     static currentDirectory = new BlobManager("~", null, "folder")
+    static ubuntuDirectory = new BlobManager("ubuntu", this.currentDirectory, "folder");
+    static windowsXPDirectory = new BlobManager("windows-xp", this.currentDirectory, "folder");
 
     static init() {
         // prompt = /
-        this.makeDir(["windows-xp", "ubuntu"])
+        this.currentDirectory.addBlob(this.ubuntuDirectory)
+        this.currentDirectory.addBlob(this.windowsXPDirectory)
 
         // prompt = /ubuntu
         this.changeDir("ubuntu")

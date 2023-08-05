@@ -9,6 +9,9 @@
   --color-purple: #978BC4;
   --color-blue: #83B3E0;
   --color-dark-blue: #579ABE;
+  --color-windows-xp-taskbar-dark-blue: #235DDB;
+  --color-windows-xp-taskbar-light-blue: #0D8CE8;
+  --color-windows-xp-taskbar-dark-green: #48AF49;
 }
 
 body {
