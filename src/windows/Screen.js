@@ -6,6 +6,7 @@ import AppContext from "../AppContext";
 class Screen extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             blobSize: 50,
             spacing: 30,
@@ -15,6 +16,7 @@ class Screen extends Component {
 
         // Create a ref to hold the screen element
         this.screenRef = React.createRef();
+        this.screenContentRef = React.createRef();
     }
 
     componentDidMount() {
@@ -30,11 +32,9 @@ class Screen extends Component {
     }
 
     handleResize = () => {
-        // Update the blob position when the Screen size changes
         const screenWidth = this.screenRef.current.clientWidth;
-        const screenHeight = this.screenRef.current.clientHeight;
+        const screenHeight = this.screenContentRef.current.clientHeight;
 
-        // Update the state with new screen dimensions
         this.setState({screenWidth, screenHeight});
     };
 
@@ -83,11 +83,7 @@ class Screen extends Component {
 
     renderBlobs() {
         const {displayDirectory} = this.props;
-        const {blobSize, spacing} = this.state;
-
-        // TODO Check why this.state.screenWidth and height are undefined
-        const maxBlobsInRow = Math.floor(this.state.screenWidth / (blobSize + spacing)) - 1
-        const maxBlobsInCol = Math.floor(this.state.screenHeight / (blobSize + spacing)) - 1
+        const {blobSize, spacing, screenWidth, screenHeight} = this.state;
         return displayDirectory.subDirectories.map((directory, index) => (
             <div key={index}>
                 <BlobWithDraggable
@@ -95,8 +91,8 @@ class Screen extends Component {
                     y={index % 9}
                     spacing={spacing}
                     blobSize={blobSize}
-                    screenWidth={this.state.screenWidth}
-                    screenHeight={this.state.screenHeight}
+                    screenWidth={screenWidth}
+                    screenHeight={screenHeight}
                     directory={directory}
                     isDraggable={this.props.isDesktop}
                 />
@@ -115,10 +111,12 @@ class Screen extends Component {
             <div>
                 {this.props.isDesktop ?
                     <div id={"desktopScreen"} className={"screen"} ref={this.screenRef}>
-                        {this.renderBlobs()}
+                        <div className="screen-content-container" ref={this.screenContentRef}>
+                                {this.renderBlobs()}
+                        </div>
                     </div>
                     :
-                    <div className={"screen screenFolder"} ref={this.screenRef} style={screenStyle} onMouseDown={this.handleScreenMouseDown}>
+                    <div className={"screen screen-folder"} ref={this.screenRef} style={screenStyle} onMouseDown={this.handleScreenMouseDown}>
                         <div className="folder-topbar" onMouseDown={this.handleTopbarMouseDown}>
                             <div className="folder-directory-info">
                                 <img src={"windows-xp/icons/" + getImgFromDirectory(this.props.displayDirectory)}/>
@@ -130,7 +128,11 @@ class Screen extends Component {
                                 <img src="windows-xp/icons/close.png" className="modifier close-folder" onMouseDown={(event) => event.stopPropagation()} onClick={this.closeWindow}></img>
                             </div>
                         </div>
-                        {this.renderBlobs()}
+                        <div className="screen-content-container">
+                            <div className="screen-content" ref={this.screenContentRef}>
+                                {this.props.displayDirectory.type === "folder" ? this.renderBlobs() : "this is text"}
+                            </div>
+                        </div>
                     </div>
 
                 }

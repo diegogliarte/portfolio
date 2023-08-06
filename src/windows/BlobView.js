@@ -31,6 +31,10 @@ class BlobView extends React.Component {
             AppContext.setMode("terminal")
         } else if (directory.type === "folder") {
             AppContext.addWindow(directory)
+        } else if (directory.type === "file") {
+            if (directory.name.endsWith("txt")) {
+                AppContext.addWindow(directory)
+            }
         }
     };
 

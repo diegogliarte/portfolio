@@ -3,7 +3,6 @@ import {getImgFromDirectory} from "./BlobView";
 
 class Draggable extends Component {
 
-    topMargin = 30
 
     constructor(props) {
         super(props);
@@ -13,7 +12,7 @@ class Draggable extends Component {
             initialX: blobSize / 2,
             initialY: blobSize / 2,
             currentX: (blobSize + this.props.x * (blobSize + spacing)),
-            currentY: (this.topMargin + blobSize + this.props.y * (blobSize + spacing)),
+            currentY: (blobSize + this.props.y * (blobSize + spacing)),
         };
     }
 
@@ -21,10 +20,11 @@ class Draggable extends Component {
     getSnappedCoordinates(currentX, currentY) {
         const {blobSize, spacing, screenWidth, screenHeight} = this.props;
 
+
         const spaceBetween = blobSize + spacing
 
         const minCoordsLeft = blobSize
-        const minCoordsUp = this.topMargin + blobSize
+        const minCoordsUp = blobSize
 
         const maxBlobsInRow = Math.floor(screenWidth / spaceBetween) - 1
         const maxBlobsInCol = Math.floor(screenHeight / spaceBetween) - 1
@@ -33,7 +33,8 @@ class Draggable extends Component {
         const snappedX = Math.min(blobSize + maxBlobsInRow * spaceBetween, Math.max(minCoordsLeft, blobSize + coordsX * spaceBetween))
 
         const coordsY = Math.floor((currentY - blobSize / 2) / spaceBetween)
-        const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, this.topMargin + blobSize + coordsY * spaceBetween))
+        const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, blobSize + coordsY * spaceBetween))
+        console.log(snappedX, snappedY)
         return {snappedX, snappedY};
     }
 
@@ -79,12 +80,11 @@ class Draggable extends Component {
         const {currentX, currentY, isDragging, snappedX, snappedY} = this.state;
         const {render} = this.props;
         return (
-            <>
+            <div className="blob-container">
                 {isDragging && snappedX !== undefined && snappedY !== undefined && (
                     <PhantomBlob
                         x={snappedX}
                         y={snappedY}
-                        blobSize={this.props.blobSize}
                         directory={this.props.directory}
                     />
                 )}
@@ -93,23 +93,21 @@ class Draggable extends Component {
                     y: currentY,
                     onMouseDown: this.handleMouseDown,
                 })}
-            </>
+            </div>
         );
     }
 }
 
-const PhantomBlob = ({ x, y, blobSize, directory }) => {
+const PhantomBlob = ({ x, y, directory }) => {
     const phantomStyle = {
         left: `${x}px`,
         top: `${y}px`,
-        width: `${blobSize}px`,
-        height: `${blobSize}px`,
-        opacity: 0.5,
-        position: "absolute",
+        opacity: 0.5
     };
 
     return <div className="blobView" style={phantomStyle}>
-        <img src={"windows-xp/icons/" + getImgFromDirectory(directory)}/>
+        <img src={"windows-xp/icons/" + getImgFromDirectory(directory)} alt="Folder"/>
+        <div className="blobViewName">{directory.name}</div>
     </div>;
 };
 
