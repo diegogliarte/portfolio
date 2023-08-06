@@ -21,8 +21,7 @@
     gap: 5px;
     font-weight: bold;
     font-size: 1rem;
-    background: var(--color-windows-xp-taskbar-dark-green)
-    linear-gradient(rgba(0, 0, 0, 0.1),rgba(0, 0, 0, 0.3));
+    background: var(--color-windows-xp-taskbar-dark-green) linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
 
 }
 
@@ -39,5 +38,40 @@
     height: 100%;
     background-color: var(--color-windows-xp-taskbar-light-blue);
     text-shadow: none;
+}
 
+.taskbar-folders-container {
+    height: 100%;
+    width: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.taskbar-folder {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    background-color: var(--color-windows-xp-taskbar-light-blue);
+    height: 85%;
+    border-radius: 1px;
+    gap: 0.5rem;
+    overflow: clip;
+    cursor: pointer;
+}
+
+.taskbar-folder:hover {
+    filter: brightness(1.2);
+}
+
+.taskbar-folder.selected {
+    filter: brightness(0.8);
+}
+
+.taskbar-folder img {
+    height: 100%;
+    margin: 0 0 0 0.5rem;
 }
