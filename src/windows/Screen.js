@@ -11,7 +11,9 @@ class Screen extends Component {
             blobSize: 50,
             spacing: 30,
             x: this.props.x,
-            y: this.props.y
+            y: this.props.y,
+            textAreaContent: this.props.displayDirectory.content || "", // Initialize with the initial content
+
         };
 
         // Create a ref to hold the screen element
@@ -30,6 +32,14 @@ class Screen extends Component {
         // Remove the event listener when the Screen component is unmounted
         window.removeEventListener("resize", this.handleResize);
     }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.textAreaContent !== this.state.textAreaContent) {
+
+            this.props.displayDirectory.content = this.state.textAreaContent;
+        }
+    }
+
 
     handleResize = () => {
         const screenWidth = this.screenRef.current.clientWidth;
@@ -81,9 +91,16 @@ class Screen extends Component {
         document.removeEventListener("mouseup", this.handleTopbarMouseUp);
     };
 
+    handleTextareaInput = (event) => {
+        const content = event.target.value;
+        this.setState({ textAreaContent: content });
+        this.props.displayDirectory.content = content
+    };
+
     renderBlobs() {
         const {displayDirectory} = this.props;
         const {blobSize, spacing, screenWidth, screenHeight} = this.state;
+        console.log(this.state.screenHeight)
         return displayDirectory.subDirectories.map((directory, index) => (
             <div key={index}>
                 <BlobWithDraggable
@@ -110,7 +127,7 @@ class Screen extends Component {
         return (
             <div>
                 {this.props.isDesktop ?
-                    <div id={"desktopScreen"} className={"screen"} ref={this.screenRef}>
+                    <div id={"desktop-screen"} className={"screen"} ref={this.screenRef}>
                         <div className="screen-content-container" ref={this.screenContentRef}>
                                 {this.renderBlobs()}
                         </div>
@@ -130,7 +147,20 @@ class Screen extends Component {
                         </div>
                         <div className="screen-content-container">
                             <div className="screen-content" ref={this.screenContentRef}>
-                                {this.props.displayDirectory.type === "folder" ? this.renderBlobs() : "this is text"}
+                                {this.props.displayDirectory.type === "folder" ?
+                                    this.renderBlobs() :
+                                    this.props.displayDirectory.type === "file" ?
+                                        this.props.displayDirectory.name.endsWith("txt") ?
+                                            <textarea
+                                                name={"screen-textarea-" + this.props.id}
+                                                id={"screen-textarea-" + this.props.id}
+                                                onInput={this.handleTextareaInput}
+                                                value={this.state.textAreaContent}
+                                            >
+                                            </textarea> :
+                                            "not text"
+                                         :
+                                        "Error: Couldn't open file, unknown type."}
                             </div>
                         </div>
                     </div>

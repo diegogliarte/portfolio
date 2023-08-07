@@ -29,13 +29,53 @@ class DirectoryManager {
         // prompt = /windows-xp
         this.changeDir("windows-xp")
 
+
+        let certsFile = new BlobManager("certs.txt", this.currentDirectory, "file")
+        certsFile.content = "AI-900, SC-900, DP-900 issued by Microsoft\n" +
+            "Google IT Automation Professional Certificate, issued by Coursera\n" +
+            "Google IT Support Professional Certificate, issued by Coursera\n" +
+            "Google Data Analytics, issued by Coursera\n" +
+            "First Certificate (B2), issued by Cambridge"
+
+        let cvFile = new BlobManager("CV.pdf", this.currentDirectory, "file")
+
+        let projectsFile = new BlobManager("projects.txt", this.currentDirectory, "file")
+        projectsFile.content = "Most of my projects can be found on my GitHub. Some of the most interesting ones are:\n" +
+            "\n" +
+            "Terminal Portfolio\n" +
+            "The website you are browsing right now!\n" +
+            ">> React, JS, CSS, HTML, Unix <<\n" +
+            "\n" +
+            "Sudoku Recognizer\n" +
+            "Interprets a video stream to detect a sudoku, build it, and solve it using backtracking\n" +
+            ">> Python, OpenCV, Machine Learning, Computer Vision <<\n" +
+            "\n" +
+            "Various Mini Games\n" +
+            "Made in the span of two weeks because I was bored an wanted to see if I would be able to code them without any reference. Snake, Tic Tac Toe, Minesweeper, Flappy Birds... You name it!\n" +
+            ">> p5js, JS, CSS, HTML <<\n" +
+            "\n" +
+            "Terminal Sorting Visualizer\n" +
+            "Visualizer for the most common sorting algorithms such as Quicksort, Bubblesort, Selectionsort, among some weird ones like Bongosort or Stalinsort (yeah, you heard right). Used ANSI escape codes to optimize performance\n" +
+            ">> Python, ANSI escape codes <<"
+
+        let skillsFile = new BlobManager("skills.txt", this.currentDirectory, "file")
+        skillsFile.content = "Languages: Python, JavaScript, bash, Java, SQL, C/C++\n" +
+            "Python Tech: OpenCV, numpy, Flask, FastAPI\n" +
+            "Website Tech: HTML, CSS, VanillaJS, React\n" +
+            "General Tech: Unix, Git, GitHub, Docker, AWS"
+
+        this.currentDirectory.addBlob(certsFile)
+        this.currentDirectory.addBlob(cvFile)
+        this.currentDirectory.addBlob(projectsFile)
+        this.currentDirectory.addBlob(skillsFile)
+        this.currentDirectory.addBlob(new BlobManager("cmd.exe", this.currentDirectory, "terminal"))
+
+        
+        // this.currentDirectory.addBlob(new BlobManager("file2.txt", this.currentDirectory, "file"))
+        // this.currentDirectory.addBlob(new BlobManager("file3.txt", this.currentDirectory, "file"))
+
         let folder1 = new BlobManager("folder1", this.currentDirectory, "folder");
         let folder2 = new BlobManager("folder2", this.currentDirectory, "folder");
-
-        this.currentDirectory.addBlob(new BlobManager("file1.txt", this.currentDirectory, "file"))
-        this.currentDirectory.addBlob(new BlobManager("file2.txt", this.currentDirectory, "file"))
-        this.currentDirectory.addBlob(new BlobManager("file3.txt", this.currentDirectory, "file"))
-        this.currentDirectory.addBlob(new BlobManager("cmd.exe", this.currentDirectory, "terminal"))
         this.currentDirectory.addBlob(folder1)
         this.currentDirectory.addBlob(folder2)
 

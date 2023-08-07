@@ -34,7 +34,6 @@ class Draggable extends Component {
 
         const coordsY = Math.floor((currentY - blobSize / 2) / spaceBetween)
         const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, blobSize + coordsY * spaceBetween))
-        console.log(snappedX, snappedY)
         return {snappedX, snappedY};
     }
 

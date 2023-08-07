@@ -3,7 +3,12 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: var(--color-windows-xp-taskbar-dark-blue);
+    background: linear-gradient(to bottom,
+    var(--color-windows-xp-taskbar-dark-blue) 0%,
+    var(--color-windows-xp-taskbar-light-blue) 9%,
+    var(--color-windows-xp-taskbar-dark-blue) 18%,
+    var(--color-windows-xp-taskbar-dark-blue) 92%,
+    #333 100%) center/cover no-repeat;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -17,12 +22,19 @@
     width: 100px;
     cursor: pointer;
     text-shadow: none;
-    border-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     gap: 5px;
     font-weight: bold;
     font-size: 1rem;
-    background: var(--color-windows-xp-taskbar-dark-green) linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3));
-
+    box-shadow: 0 5px 10px #79ce71 inset;
+    background: radial-gradient(circle,
+    #5eac56 0%,
+    #3c873c 100%) center/cover no-repeat;
 }
 
 .start-menu img {
@@ -36,8 +48,14 @@
     align-items: center;
     width: 85px;
     height: 100%;
-    background-color: var(--color-windows-xp-taskbar-light-blue);
     text-shadow: none;
+    background: linear-gradient(to bottom,
+    var(--color-windows-xp-taskbar-light-blue) 0%,
+    var(--color-windows-xp-taskbar-lightest-blue) 9%,
+    var(--color-windows-xp-taskbar-light-blue) 18%,
+    var(--color-windows-xp-taskbar-light-blue) 92%,
+    #333 100%) center/cover no-repeat;
+    display: flex;
 }
 
 .taskbar-folders-container {
@@ -55,8 +73,12 @@
     justify-content: start;
     align-items: center;
 
-    background-color: var(--color-windows-xp-taskbar-light-blue);
-    height: 85%;
+    background: linear-gradient(to bottom,
+    var(--color-windows-xp-taskbar-light-blue) 0%,
+    #3f8cf3 9%,
+    var(--color-windows-xp-taskbar-light-blue) 18%,
+    var(--color-windows-xp-taskbar-light-blue) 92%, #333 100%) center/cover no-repeat;
+    height: 70%;
     border-radius: 1px;
     gap: 0.5rem;
     overflow: clip;
