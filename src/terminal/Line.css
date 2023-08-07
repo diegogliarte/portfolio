@@ -30,7 +30,6 @@
 
 .line {
     display: flex;
-    flex-wrap: wrap;
 }
 
 .file {
@@ -67,7 +66,6 @@ a:hover {
 }
 
 
-/* Custom CSS for the textarea-based terminal */
 .textarea-touch {
     border: none;
     resize: none;
@@ -77,9 +75,26 @@ a:hover {
     margin: 0;
     padding: 0;
     width: 100%;
+    text-transform: lowercase;
 }
 
-.textarea-touch:focus {
-    border: none;
-    outline: none;
+/* Define the animation */
+@keyframes myAnim {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.2;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.animated-textarea:not(:focus) {
+    width: 50%;
+    background-color: var(--color-white);
+    animation: myAnim 2s ease 0s infinite normal forwards;
 }

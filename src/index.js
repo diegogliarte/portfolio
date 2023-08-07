@@ -16,7 +16,7 @@ function App() {
     return (
         <React.StrictMode>
             <div>
-                    <Terminal theme={"dark"}/>
+                <Terminal theme={"dark"}/>
             </div>
         </React.StrictMode>
     );

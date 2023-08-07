@@ -49,6 +49,7 @@ class Terminal extends Component {
         let key = event.key;
 
         if (/^[a-zA-Z0-9!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~ ]$/.test(key)) {
+            if (this.state.isTouchDevice) return
             this.setState((prevState) => ({
                 stdin: prevState.stdin.slice(0, prevState.cursorPosition) + key +
                     prevState.stdin.slice(prevState.cursorPosition),
@@ -65,10 +66,13 @@ class Terminal extends Component {
             event.preventDefault();
             if (this.state.isTouchDevice) {
                 let textarea = document.getElementById("textarea-touch")
-                this.setState({stdin: textarea.value.trim()})
-                textarea.value = ""
+                this.setState({stdin: textarea.value.trim().toLowerCase()}, () => {
+                    Commands.handleCommands(this);
+                    textarea.value = ""
+                })
+            } else {
+                Commands.handleCommands(this);
             }
-            Commands.handleCommands(this);
 
         } else if (key === "ArrowUp") {
             event.preventDefault();

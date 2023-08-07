@@ -1,16 +1,26 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import "./Line.css"
-import {logDOM} from "@testing-library/react";
 
 function Line(props) {
     const [showCursor, setShowCursor] = useState(true);
+    const textareaRef = useRef(null);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setShowCursor((prevShowCursor) => !prevShowCursor);
+            setShowCursor(prevShowCursor => !prevShowCursor);
         }, 500);
         return () => clearInterval(intervalId);
     }, []);
+
+    useEffect(() => {
+        // Add a CSS class to the textarea to animate it when the component mounts
+        if (textareaRef.current) {
+            alert("added animated")
+            textareaRef.current.classList.add('animated-textarea');
+
+        }
+    }, []);
+
 
     return (
         <div className={"line " + props.theme} data-testid="line">
@@ -31,10 +41,10 @@ function Line(props) {
 
             ) : props.isTouchDevice ? (
                 <textarea
+                    ref={textareaRef}
                     rows='1'
                     id="textarea-touch"
-                    className={"stdout textarea-touch " + props.theme}
-                    autoFocus
+                    className={"stdout textarea-touch animated-textarea " + props.theme}
                 />
             ) : props.current ? (
                 <span className="stdout">

@@ -105,7 +105,6 @@ class Commands {
 
     static handleCommands(terminal) {
         let {command, args} = this.parseStdin(terminal.state.stdin);
-
         if (terminal.state.stdin !== "") {
             this.history.push(terminal.state.stdin)
         }
