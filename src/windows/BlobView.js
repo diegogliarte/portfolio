@@ -8,6 +8,7 @@ function getImgFromDirectory(directory) {
     if (directory.type === "folder") return "folder.png"
     if (directory.type === "file") {
         if (directory.name.endsWith("txt")) return "text.png"
+        if (directory.name.endsWith("pdf")) return "pdf.png"
     }
 
     return "default.png"
@@ -34,10 +35,11 @@ class BlobView extends React.Component {
         } else if (directory.type === "file") {
             if (directory.name.endsWith("txt")) {
                 AppContext.addWindow(directory)
+            } else if (directory.name.endsWith("pdf")) {
+                AppContext.addWindow(directory)
             }
         }
     };
-
 
 
     render() {
@@ -71,10 +73,11 @@ class BlobView extends React.Component {
 export {getImgFromDirectory};
 
 export default function BlobWithDraggable(props) {
-    const {directory, blobSize, spacing, screenWidth, screenHeight, isDraggable} = props;
+    const {indexX, indexY, directory, blobSize, spacing, screenWidth, screenHeight, isDraggable} = props;
     return (
         <Draggable
-            {...props}
+            indexX={indexX}
+            indexY={indexY}
             blobSize={blobSize}
             spacing={spacing}
             screenWidth={screenWidth}

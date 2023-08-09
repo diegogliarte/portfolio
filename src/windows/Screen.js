@@ -3,6 +3,7 @@ import "./Screen.css";
 import BlobWithDraggable, {getImgFromDirectory} from "./BlobView";
 import AppContext from "../AppContext";
 
+
 class Screen extends Component {
     constructor(props) {
         super(props);
@@ -62,7 +63,7 @@ class Screen extends Component {
         AppContext.removeWindow(this.props.id)
     }
 
-    handleScreenMouseDown = (event) => {
+    handleScreenMouseDown = () => {
         AppContext.updateZIndexOnWindows(this.props.id)
         this.forceUpdate()
     }
@@ -93,19 +94,18 @@ class Screen extends Component {
 
     handleTextareaInput = (event) => {
         const content = event.target.value;
-        this.setState({ textAreaContent: content });
+        this.setState({textAreaContent: content});
         this.props.displayDirectory.content = content
     };
 
     renderBlobs() {
         const {displayDirectory} = this.props;
         const {blobSize, spacing, screenWidth, screenHeight} = this.state;
-        console.log(this.state.screenHeight)
         return displayDirectory.subDirectories.map((directory, index) => (
             <div key={index}>
                 <BlobWithDraggable
-                    x={Math.floor(index / 9)}
-                    y={index % 9}
+                    indexX={Math.floor(index / 9)}
+                    indexY={index % 9}
                     spacing={spacing}
                     blobSize={blobSize}
                     screenWidth={screenWidth}
@@ -129,20 +129,28 @@ class Screen extends Component {
                 {this.props.isDesktop ?
                     <div id={"desktop-screen"} className={"screen"} ref={this.screenRef}>
                         <div className="screen-content-container" ref={this.screenContentRef}>
-                                {this.renderBlobs()}
+                            {this.renderBlobs()}
                         </div>
                     </div>
                     :
-                    <div className={"screen screen-folder"} ref={this.screenRef} style={screenStyle} onMouseDown={this.handleScreenMouseDown}>
+                    <div className={"screen screen-folder"} ref={this.screenRef} style={screenStyle}
+                         onMouseDown={this.handleScreenMouseDown}>
                         <div className="folder-topbar" onMouseDown={this.handleTopbarMouseDown}>
                             <div className="folder-directory-info">
-                                <img src={"windows-xp/icons/" + getImgFromDirectory(this.props.displayDirectory)}/>
+                                <img src={"windows-xp/icons/" + getImgFromDirectory(this.props.displayDirectory)}
+                                     alt={this.props.displayDirectory.name}/>
                                 {this.props.displayDirectory.name}
                             </div>
                             <div className="folder-modifiers-container">
-                                <img src="windows-xp/icons/minimize.png" className="modifier minimize-folder" onMouseDown={this.minimizeWindow}></img>
-                                <img src="windows-xp/icons/maximize.png" className="modifier maximize-folder" onMouseDown={this.maximizeWindow}></img>
-                                <img src="windows-xp/icons/close.png" className="modifier close-folder" onMouseDown={(event) => event.stopPropagation()} onClick={this.closeWindow}></img>
+                                <img src="windows-xp/icons/minimize.png" className="modifier minimize-folder"
+                                     alt="Minimize"
+                                     onMouseDown={this.minimizeWindow}></img>
+                                <img src="windows-xp/icons/maximize.png" className="modifier maximize-folder"
+                                     alt="Maximize"
+                                     onMouseDown={this.maximizeWindow}></img>
+                                <img src="windows-xp/icons/close.png" className="modifier close-folder"
+                                     alt="Close"
+                                     onMouseDown={(event) => event.stopPropagation()} onClick={this.closeWindow}></img>
                             </div>
                         </div>
                         <div className="screen-content-container">
@@ -158,8 +166,12 @@ class Screen extends Component {
                                                 value={this.state.textAreaContent}
                                             >
                                             </textarea> :
-                                            "not text"
-                                         :
+                                            this.props.displayDirectory.name.endsWith("pdf") ?
+                                                <div className="pdf-viewer-container">
+                                                    <embed className="pdf-viewer" src="files/CV.pdf" type="application/pdf"/>
+                                                </div> :
+                                                "Not PDF"
+                                        :
                                         "Error: Couldn't open file, unknown type."}
                             </div>
                         </div>

@@ -64,10 +64,15 @@ class DirectoryManager {
             "Website Tech: HTML, CSS, VanillaJS, React\n" +
             "General Tech: Unix, Git, GitHub, Docker, AWS"
 
+        let workFile = new BlobManager("work.txt", this.currentDirectory, "file")
+        workFile.content = "Oct 2021 - March 2023\n" +
+        "Software Developer, Perspectiv"
+
         this.currentDirectory.addBlob(certsFile)
         this.currentDirectory.addBlob(cvFile)
         this.currentDirectory.addBlob(projectsFile)
         this.currentDirectory.addBlob(skillsFile)
+        this.currentDirectory.addBlob(workFile)
         this.currentDirectory.addBlob(new BlobManager("cmd.exe", this.currentDirectory, "terminal"))
 
         

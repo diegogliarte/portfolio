@@ -9,17 +9,18 @@ class Draggable extends Component {
         const {blobSize, spacing} = this.props
         this.state = {
             isDragging: false,
+            indexX: this.props.indexX,
+            indexY: this.props.indexY,
             initialX: blobSize / 2,
             initialY: blobSize / 2,
-            currentX: (blobSize + this.props.x * (blobSize + spacing)),
-            currentY: (blobSize + this.props.y * (blobSize + spacing)),
+            currentX: (blobSize + this.props.indexX * (blobSize + spacing)),
+            currentY: (blobSize + this.props.indexY * (blobSize + spacing)),
         };
     }
 
 
     getSnappedCoordinates(currentX, currentY) {
         const {blobSize, spacing, screenWidth, screenHeight} = this.props;
-
 
         const spaceBetween = blobSize + spacing
 
@@ -29,11 +30,11 @@ class Draggable extends Component {
         const maxBlobsInRow = Math.floor(screenWidth / spaceBetween) - 1
         const maxBlobsInCol = Math.floor(screenHeight / spaceBetween) - 1
 
-        const coordsX = Math.floor((currentX - blobSize / 2) / spaceBetween)
-        const snappedX = Math.min(blobSize + maxBlobsInRow * spaceBetween, Math.max(minCoordsLeft, blobSize + coordsX * spaceBetween))
+        const indexX = Math.floor((currentX - blobSize / 2) / spaceBetween)
+        const snappedX = Math.min(blobSize + maxBlobsInRow * spaceBetween, Math.max(minCoordsLeft, blobSize + indexX * spaceBetween))
 
-        const coordsY = Math.floor((currentY - blobSize / 2) / spaceBetween)
-        const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, blobSize + coordsY * spaceBetween))
+        const indexY = Math.floor((currentY - blobSize / 2) / spaceBetween)
+        const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, blobSize + indexY * spaceBetween))
         return {snappedX, snappedY};
     }
 
@@ -41,7 +42,6 @@ class Draggable extends Component {
         if (!this.props.isDraggable) return;
         event.preventDefault()
         const {currentX, currentY} = this.state;
-
         this.setState({
             isDragging: true,
             initialX: event.clientX - currentX,
@@ -59,7 +59,6 @@ class Draggable extends Component {
             const currentX = event.clientX - initialX;
             const currentY = event.clientY - initialY;
             const {snappedX, snappedY} = this.getSnappedCoordinates(currentX, currentY);
-
             this.setState({currentX: currentX, currentY: currentY, snappedX: snappedX, snappedY: snappedY});
         }
     };

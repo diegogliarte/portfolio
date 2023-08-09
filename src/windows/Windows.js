@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {useState} from "react";
 import "./Windows.css";
 import Taskbar from "./Taskbar";
 import Screen from "./Screen";
