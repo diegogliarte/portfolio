@@ -13,24 +13,20 @@ class Screen extends Component {
             spacing: 30,
             x: this.props.x,
             y: this.props.y,
-            textAreaContent: this.props.displayDirectory.content || "", // Initialize with the initial content
+            textAreaContent: this.props.displayDirectory.content || "",
 
         };
 
-        // Create a ref to hold the screen element
         this.screenRef = React.createRef();
         this.screenContentRef = React.createRef();
     }
 
     componentDidMount() {
-        // Add an event listener to handle resize of the Screen component
         window.addEventListener("resize", this.handleResize);
-        // Call handleResize initially to set correct blob position
         this.handleResize();
     }
 
     componentWillUnmount() {
-        // Remove the event listener when the Screen component is unmounted
         window.removeEventListener("resize", this.handleResize);
     }
 
@@ -168,7 +164,8 @@ class Screen extends Component {
                                             </textarea> :
                                             this.props.displayDirectory.name.endsWith("pdf") ?
                                                 <div className="pdf-viewer-container">
-                                                    <embed className="pdf-viewer" src="files/CV.pdf" type="application/pdf"/>
+                                                    <embed className="pdf-viewer" src="files/CV.pdf"
+                                                           type="application/pdf"/>
                                                 </div> :
                                                 "Not PDF"
                                         :
@@ -176,11 +173,8 @@ class Screen extends Component {
                             </div>
                         </div>
                     </div>
-
                 }
             </div>
-
-
         );
     }
 }

@@ -29,19 +29,26 @@ class Draggable extends Component {
 
         const maxBlobsInRow = Math.floor(screenWidth / spaceBetween) - 1
         const maxBlobsInCol = Math.floor(screenHeight / spaceBetween) - 1
+        const {indexX, indexY} = this.getIndexFromCoords(currentX, currentY, blobSize, spacing);
 
-        const indexX = Math.floor((currentX - blobSize / 2) / spaceBetween)
         const snappedX = Math.min(blobSize + maxBlobsInRow * spaceBetween, Math.max(minCoordsLeft, blobSize + indexX * spaceBetween))
-
-        const indexY = Math.floor((currentY - blobSize / 2) / spaceBetween)
         const snappedY = Math.min(blobSize + maxBlobsInCol * spaceBetween, Math.max(minCoordsUp, blobSize + indexY * spaceBetween))
         return {snappedX, snappedY};
+    }
+
+    getIndexFromCoords(currentX, currentY, blobSize, spacing) {
+        const spaceBetween = blobSize + spacing
+
+        const indexX = Math.floor((currentX - blobSize / 2) / spaceBetween)
+        const indexY = Math.floor((currentY - blobSize / 2) / spaceBetween)
+        return {indexX, indexY};
     }
 
     handleMouseDown = (event) => {
         if (!this.props.isDraggable) return;
         event.preventDefault()
         const {currentX, currentY} = this.state;
+
         this.setState({
             isDragging: true,
             initialX: event.clientX - currentX,
@@ -76,7 +83,10 @@ class Draggable extends Component {
 
     render() {
         const {currentX, currentY, isDragging, snappedX, snappedY} = this.state;
-        const {render} = this.props;
+        const {render, blobSize, spacing} = this.props;
+
+        const {indexX, indexY} = this.getIndexFromCoords(currentX, currentY, blobSize, spacing);
+
         return (
             <div className="blob-container">
                 {isDragging && snappedX !== undefined && snappedY !== undefined && (
@@ -87,8 +97,9 @@ class Draggable extends Component {
                     />
                 )}
                 {render({
-                    x: currentX,
-                    y: currentY,
+                    x: isDragging ? currentX : blobSize + indexX * (blobSize + spacing),
+                    y: isDragging ? currentY : blobSize + indexY * (blobSize + spacing),
+
                     onMouseDown: this.handleMouseDown,
                 })}
             </div>
