@@ -26,28 +26,22 @@ class Screen extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener("resize", this.handleResize);
-        this.handleResize();
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener("resize", this.handleResize);
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.textAreaContent !== this.state.textAreaContent) {
-
-            this.props.displayDirectory.content = this.state.textAreaContent;
-        }
-    }
-
-
-    handleResize = () => {
         const screenWidth = this.screenRef.current.clientWidth;
         const screenHeight = this.screenContentRef.current.clientHeight;
 
         this.setState({screenWidth, screenHeight});
-    };
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.textAreaContent !== this.state.textAreaContent) {
+            this.setState({
+                displayDirectory: {
+                    ...this.props.displayDirectory,
+                    content: this.state.textAreaContent,
+                },
+            });
+        }
+    }
 
     minimizeWindow = (event) => {
         event.stopPropagation()
@@ -133,7 +127,9 @@ class Screen extends Component {
         document.addEventListener("mouseup", this.handleResizeMouseUp);
     };
 
+
     handleResizeMouseMove = (event) => {
+        console.log(this.state.isResizing)
         if (this.state.isResizing) {
             const {resizeStartX, resizeStartY, resizeStartWidth, resizeStartHeight, resizeDirection} = this.state;
             const deltaX = event.clientX - resizeStartX;
@@ -223,8 +219,12 @@ class Screen extends Component {
                                             </textarea> :
                                             this.props.displayDirectory.name.endsWith("pdf") ?
                                                 <div className="pdf-viewer-container">
-                                                    <embed className="pdf-viewer" src="files/CV.pdf"
-                                                           type="application/pdf"/>
+                                                    <embed className="pdf-viewer"
+                                                           src="files/CV.pdf"
+                                                           type="application/pdf"
+                                                           ref={this.pdfViewerRef}
+                                                           onMouseMove={this.handleMouseMoveOnPDF}
+                                                    />
                                                 </div> :
                                                 "Not PDF"
                                         :
