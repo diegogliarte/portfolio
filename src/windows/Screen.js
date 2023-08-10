@@ -14,7 +14,11 @@ class Screen extends Component {
             x: this.props.x,
             y: this.props.y,
             textAreaContent: this.props.displayDirectory.content || "",
-
+            isResizing: false,
+            resizeStartX: 0,
+            resizeStartY: 0,
+            resizeStartWidth: 0,
+            resizeStartHeight: 0,
         };
 
         this.screenRef = React.createRef();
@@ -113,10 +117,65 @@ class Screen extends Component {
         ));
     }
 
+    handleResizeMouseDown = (event, direction) => {
+        event.preventDefault();
+
+        this.setState({
+            isResizing: true,
+            resizeStartX: event.clientX,
+            resizeStartY: event.clientY,
+            resizeStartWidth: this.state.screenWidth,
+            resizeStartHeight: this.state.screenHeight,
+            resizeDirection: direction,
+        });
+
+        document.addEventListener("mousemove", this.handleResizeMouseMove);
+        document.addEventListener("mouseup", this.handleResizeMouseUp);
+    };
+
+    handleResizeMouseMove = (event) => {
+        if (this.state.isResizing) {
+            const {resizeStartX, resizeStartY, resizeStartWidth, resizeStartHeight, resizeDirection} = this.state;
+            const deltaX = event.clientX - resizeStartX;
+            const deltaY = event.clientY - resizeStartY;
+
+            let newWidth = resizeStartWidth + (resizeDirection.includes("right") ? deltaX : (resizeDirection.includes("left") ? -deltaX : 0))
+            let newHeight = resizeStartHeight + (resizeDirection.includes("bottom") ? deltaY : (resizeDirection.includes("top") ? -deltaY : 0))
+
+            this.setState((prevState) => ({
+                screenWidth: newWidth,
+                screenHeight: newHeight,
+                x: resizeDirection.includes("left") ? prevState.resizeStartX + deltaX : prevState.x,
+                y: resizeDirection.includes("top") ? prevState.resizeStartY + deltaY : prevState.y,
+            }));
+        }
+    };
+
+
+    handleResizeMouseUp = () => {
+        if (this.state.isResizing) {
+            this.setState({
+                isResizing: false,
+                resizeStartX: 0,
+                resizeStartY: 0,
+                resizeStartWidth: 0,
+                resizeStartHeight: 0,
+                resizeDirection: "",
+            });
+
+            document.removeEventListener("mousemove", this.handleResizeMouseMove);
+            document.removeEventListener("mouseup", this.handleResizeMouseUp);
+        }
+    };
+
     render() {
+        const {isResizing, resizeDirection} = this.state;
+
         const screenStyle = {
             left: `${this.state.x}px`,
             top: `${this.state.y}px`,
+            width: `${this.state.screenWidth}px`,
+            height: `${this.state.screenHeight}px`,
             zIndex: `${this.props.zIndex}`,
         };
 
@@ -172,6 +231,38 @@ class Screen extends Component {
                                         "Error: Couldn't open file, unknown type."}
                             </div>
                         </div>
+                        <div
+                            className={`resize-handle top ${isResizing && resizeDirection === "top" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "top")}
+                        />
+                        <div
+                            className={`resize-handle bottom ${isResizing && resizeDirection === "bottom" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "bottom")}
+                        />
+                        <div
+                            className={`resize-handle left ${isResizing && resizeDirection === "left" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "left")}
+                        />
+                        <div
+                            className={`resize-handle right ${isResizing && resizeDirection === "right" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "right")}
+                        />
+                        <div
+                            className={`resize-handle top-left ${isResizing && resizeDirection === "top-left" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "top-left")}
+                        />
+                        <div
+                            className={`resize-handle top-right ${isResizing && resizeDirection === "top-right" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "top-right")}
+                        />
+                        <div
+                            className={`resize-handle bottom-left ${isResizing && resizeDirection === "bottom-left" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "bottom-left")}
+                        />
+                        <div
+                            className={`resize-handle bottom-right ${isResizing && resizeDirection === "bottom-right" ? "active" : ""}`}
+                            onMouseDown={(event) => this.handleResizeMouseDown(event, "bottom-right")}
+                        />
                     </div>
                 }
             </div>
