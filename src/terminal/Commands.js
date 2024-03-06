@@ -170,17 +170,19 @@ class Commands {
     }
 
     static triggerSkillsCommand() {
-        return ["Languages: Python, JavaScript, bash, Java, SQL, C/C++",
-            "Python Tech: OpenCV, numpy, Flask, FastAPI",
-            "Website Tech: HTML, CSS, VanillaJS, React",
-            "General Tech: Unix, Git, GitHub, Docker, AWS"
+        return ["Languages: Python, JavaScript, bash, Java, Kotlin, SQL, C/C++",
+            "Python Tech: OpenCV, numpy, Flask, FastAPI, Django",
+            "Website Tech: HTML, CSS, MongoDB, Express, React, Node",
+            "General Tech: AWS, Unix, Docker, Git, GitHub, GitLab"
         ]
     }
 
     static triggerWhoAmICommand() {
         return [
-            "I am Diego González, a Sotware Developer located in Spain. Currently a CS and Business student with almost " +
-            "2 years of professional experience as a software developer. Always in the process of improving."
+            "Full-time student enrolled in a Double Degree in CS and Business, alongside being a part-time Software Developer.",
+            "Some of my tech stack includes Python, JavaScript, Java, C++, HTML, CSS,  SQL, OpenCV, Unix, Git, and some others.",
+            "Over the years I have done multiple personal projects relating to automation, web apps, web scrapping, computer vision, machine learning, implementation of various algorithms (sorts, backtracking...), usage of 3rd-party APIs (YouTube's, Twitter's...), CLI visualizations, GameDev...",
+            "I try not to get stuck knowledge-wise, so I am always trying to find new techs to learn about and studying for certifications on the side to increase my technological scope."
         ]
     }
 
@@ -283,6 +285,9 @@ class Commands {
 
     static triggerWork() {
         return [
+            "Sep 2023 - Present",
+            "Software Developer, SEMIC",
+            "",
             "Oct 2021 - March 2023",
             "Software Developer, Perspectiv",
             "",
@@ -309,6 +314,7 @@ class Commands {
 
     static triggerCerts() {
         return [
+            "<a target='_blank'  href='https://learn.microsoft.com/en-us/users/diegogliarte/credentials/1a9e6bbcc1fd353d'>AI-102</a>",
             "<a target='_blank'  href='https://learn.microsoft.com/en-us/users/diegogliarte/credentials/f435a6bd0a47a093'>AI-900</a>",
             "<a target='_blank'  href='https://learn.microsoft.com/en-us/users/diegogliarte/credentials/25d7b65d5e62f715'>DP-900</a>",
             "<a target='_blank'  href='https://learn.microsoft.com/en-us/users/diegogliarte/credentials/22ed36927ffdec1e'>SC-900</a>",
