@@ -179,7 +179,7 @@ class Commands {
 
     static triggerWhoAmICommand() {
         return [
-            "Full-time student enrolled in a Double Degree in CS and Business, alongside being a part-time Software Developer.",
+            "full-time student enrolled in a Double Degree in CS and Business, alongside being a part-time Software Developer.",
             "Some of my tech stack includes Python, JavaScript, Java, C++, HTML, CSS,  SQL, OpenCV, Unix, Git, and some others.",
             "Over the years I have done multiple personal projects relating to automation, web apps, web scrapping, computer vision, machine learning, implementation of various algorithms (sorts, backtracking...), usage of 3rd-party APIs (YouTube's, Twitter's...), CLI visualizations, GameDev...",
             "I try not to get stuck knowledge-wise, so I am always trying to find new techs to learn about and studying for certifications on the side to increase my technological scope."
