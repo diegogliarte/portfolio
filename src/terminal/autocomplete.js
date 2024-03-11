@@ -4,7 +4,7 @@ import Commands from "./Commands";
 export function handleAutocomplete(terminal) {
     let {command, args} = Commands.parseStdin(terminal.state.stdin);
     let autocompleteElements
-    let output
+    let output = null
     if (!Commands.isCommand(command)) {
         autocompleteElements = autocompleteFromList(command, Commands.getVisibleCommands());
         if (autocompleteElements && autocompleteElements.length === 1) {
@@ -12,6 +12,7 @@ export function handleAutocomplete(terminal) {
             terminal.setState({stdin: element, cursorPosition: element.length})
             output = null
         } else if (autocompleteElements) {
+            terminal.setState()
             output = [autocompleteElements.join("  ")]
         }
 
@@ -56,13 +57,11 @@ export function autocompleteBlob(args, includeFile = true, includeFolder = true)
             const element = autocompleteElements[0]
             path += element + (currentDirectory.getSubDirectory(element).isFolder() ? "/" : "")
             currentDirectory = currentDirectory.getSubDirectory(element)
-        } else if (autocompleteElements) {
-            return [
-                autocompleteElements.map(directory => {
+        } else if (autocompleteElements.length >= 1) {
+            return autocompleteElements.map(directory => {
                     let blob = currentDirectory.getSubDirectory(directory)
                     return `<span class=${blob.type}>${blob.name}</span>`
-                }).join("  ")
-            ]
+                })
         } else {
             return null
         }
