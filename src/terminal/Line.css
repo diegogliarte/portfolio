@@ -28,9 +28,6 @@
     line-height: 1rem;
 }
 
-.line {
-    display: flex;
-}
 
 .file {
     color: var(--color-white);
