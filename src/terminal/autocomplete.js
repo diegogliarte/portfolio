@@ -1,42 +1,45 @@
 import DirectoryManager from "./DirectoryManager";
 import Commands from "./Commands";
 
-export function handleAutocomplete(terminal) {
-    let {command, args} = Commands.parseStdin(terminal.state.stdin);
-    let autocompleteElements
-    let output = null
+export const handleAutocomplete = (terminal) => {
+    const { command, args } = Commands.parseStdin(terminal.state.stdin);
+    let output = null;
+
     if (!Commands.isCommand(command)) {
-        autocompleteElements = autocompleteFromList(command, Commands.getVisibleCommands());
-        if (autocompleteElements && autocompleteElements.length === 1) {
-            let element = autocompleteElements[0]
-            terminal.setState({stdin: element, cursorPosition: element.length})
-            output = null
-        } else if (autocompleteElements) {
-            terminal.setState()
-            output = [autocompleteElements.join("  ")]
-        }
-
+        output = handleNonCommandAutocomplete(command, terminal);
     } else {
-        const autocompleteMethod = Commands.commands[command]["autocomplete"] || Commands.commands["default"]["autocomplete"]
-        autocompleteElements = autocompleteMethod(terminal, args)
-        if (autocompleteElements && autocompleteElements.length === 1) {
-            let element = autocompleteElements[0]
-            terminal.setState({stdin: `${command} ${element}`, cursorPosition: `${command} ${element}`.length})
-            output = null
-        } else if (autocompleteElements) {
-            output = [autocompleteElements.join("  ")]
-        }
+        output = handleCommandAutocomplete(command, args, terminal);
     }
-    Commands.executeCommand(terminal, output)
-}
 
-export function autocompleteFromList(element, list) {
-    let commandsAutocomplete = list.filter(e => {
-        return element === e.slice(0, element.length)
-    })
+    Commands.executeCommand(terminal, output);
+};
 
-    return commandsAutocomplete || null;
-}
+const handleNonCommandAutocomplete = (command, terminal) => {
+    const autocompleteElements = autocompleteFromList(command, Commands.getVisibleCommands());
+    return processAutocompleteElements(autocompleteElements, command, terminal);
+};
+
+const handleCommandAutocomplete = (command, args, terminal) => {
+    const autocompleteMethod = Commands.commands[command]?.autocomplete || Commands.commands.default.autocomplete;
+    const autocompleteElements = autocompleteMethod(terminal, args);
+    return processAutocompleteElements(autocompleteElements, command, terminal, true);
+};
+
+
+const processAutocompleteElements = (elements, command, terminal, isCommand = false) => {
+    if (elements && elements.length === 1) {
+        const fullCommand = isCommand ? `${command} ${elements[0]}` : elements[0];
+        terminal.setState({ stdin: fullCommand, cursorPosition: fullCommand.length });
+        return null;
+    } else if (elements?.length > 1) {
+        return [elements.join("  ")];
+    }
+    return null;
+};
+
+export const autocompleteFromList = (element, list) => {
+    return list.filter(e => e.startsWith(element));
+};
 
 export function autocompleteBlob(args, includeFile = true, includeFolder = true) {
     const possibleDirectory = args.length > 0 ? args[0] : ""
@@ -52,7 +55,9 @@ export function autocompleteBlob(args, includeFile = true, includeFolder = true)
             .map(subDirectory => {
                 return subDirectory.name
             })
+
         let autocompleteElements = autocompleteFromList(directory, subDirectories)
+
         if (autocompleteElements && autocompleteElements.length === 1) {
             const element = autocompleteElements[0]
             path += element + (currentDirectory.getSubDirectory(element).isFolder() ? "/" : "")
