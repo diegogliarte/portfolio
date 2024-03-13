@@ -400,7 +400,7 @@ class Commands {
     static triggerWrongHelp() {
         return [
             "You almost got it!",
-            {"message": "Type help for a list of supported commands", "prompt": DirectoryManager.getPrompt()}
+            {"message": "Type help for a list of supported commands", "prompt": DirectoryManager.qgetPrompt()}
         ]
     }
 

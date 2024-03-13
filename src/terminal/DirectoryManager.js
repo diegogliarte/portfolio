@@ -3,39 +3,52 @@ import Blob from "./Blob";
 
 class DirectoryManager {
 
-    static currentDirectory = new Blob("~", null, "folder")
+    static rootDirectory = new Blob("/", null, "folder");
+    static currentDirectory = DirectoryManager.rootDirectory;
+    static prompt = "/";
 
     static init() {
+        this.makeDir(["home"], this.rootDirectory);
+        const homeDirectory = this.rootDirectory.getSubDirectory("home");
+        this.makeDir(["diegogliarte"], homeDirectory);
+
+        const userDirectory = homeDirectory.getSubDirectory("diegogliarte");
+        this.currentDirectory = userDirectory;
+
         this.makeDir(["life"]);
         this.changeDir("life");
 
         let meaning = new Blob("meaning.txt", this.currentDirectory, "file");
-        meaning.content = 42;
+        meaning.content = "42";
+
         this.currentDirectory.addBlob(meaning);
 
-        this.changeDir("..");
+        this.currentDirectory = userDirectory;
 
-        this.prompt = this.currentDirectory.prompt
+        this.updatePrompt();
     }
 
     static changeDir(directory) {
         if (directory === "..") {
-            this.currentDirectory = this.currentDirectory.parent !== null ? this.currentDirectory.parent : this.currentDirectory
+            if (this.currentDirectory.parent !== null) {
+                this.currentDirectory = this.currentDirectory.parent;
+            }
+        } else if (directory === "/") {
+            this.currentDirectory = this.rootDirectory;
         } else {
-            let target = this.currentDirectory.getSubDirectory(directory)
+            let target = this.currentDirectory.getSubDirectory(directory);
             if (target !== null) {
-                this.currentDirectory = target
+                this.currentDirectory = target;
             }
         }
     }
 
-    static makeDir(names) {
+    static makeDir(names, parentDirectory = this.currentDirectory) {
         for (let name of names) {
-            const folder = new Blob(name, this.currentDirectory, "folder")
-            this.currentDirectory.addBlob(folder)
+            const folder = new Blob(name, parentDirectory, "folder");
+            parentDirectory.addBlob(folder);
         }
     }
-
 
     static remove(names) {
         let output = []
@@ -105,9 +118,23 @@ class DirectoryManager {
     }
 
     static updatePrompt() {
-        this.prompt = this.currentDirectory.prompt
+        let fullPath = this.getFullPath(this.currentDirectory);
+        if (fullPath.startsWith("/home/diegogliarte")) {
+            this.prompt = fullPath.replace("/home/diegogliarte", "~");
+        } else {
+            this.prompt = fullPath;
+        }
     }
 
+    static getFullPath(directory) {
+        let path = [];
+        let current = directory;
+        while (current !== null) {
+            path.unshift(current.name);
+            current = current.parent;
+        }
+        return "/" + path.slice(1).join("/");
+    }
 }
 
 export default DirectoryManager
