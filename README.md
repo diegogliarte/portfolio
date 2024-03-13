@@ -6,7 +6,7 @@ Welcome to my portfolio, a creative project that simulates an Ubuntu terminal. T
 - Interactive project showcase
 
 ### Hosted Version
-Visit the live version [here](www.diegogliarte.com).
+Visit the live version [here](https://www.diegogliarte.com/).
 
 ### Installation & Setup
 1. Clone the repository
