@@ -53,6 +53,9 @@ a {
     color: var(--color-blue);
 }
 
+.line:has(.textarea-touch)  {
+    display: flex;
+}
 
 a:hover {
     color: var(--color-white);
@@ -76,7 +79,7 @@ a:hover {
 }
 
 /* Define the animation */
-@keyframes myAnim {
+@keyframes pulsating {
     0% {
         opacity: 1;
     }
@@ -93,5 +96,5 @@ a:hover {
 .animated-textarea:not(:focus) {
     width: 50%;
     background-color: var(--color-white);
-    animation: myAnim 2s ease 0s infinite normal forwards;
+    animation: pulsating 2s ease 0s infinite normal forwards;
 }
