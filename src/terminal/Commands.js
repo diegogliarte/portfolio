@@ -296,7 +296,9 @@ class Commands {
     }
 
     static triggerCV() {
-        const fileUrl = "/files/CV.pdf";
+        const googleDriveId = "1hfEkj-rFPxrGfJFBFPKlDBUXmHaFfOUIEkxwmiwVTkQ"
+        const fileUrl = `https://docs.google.com/document/d/${googleDriveId}/export?format=pdf`
+
         const downloadLink = document.createElement("a");
         downloadLink.href = fileUrl;
         downloadLink.download = "CV";
