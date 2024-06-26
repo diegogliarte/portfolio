@@ -266,7 +266,7 @@ class Commands {
             "The website you are browsing right now!",
             ">> React, JS, CSS, HTML, Unix <<",
             "",
-            "<a target='_blank' href='https://github.com/diegogliarte/p5js-projects'>Sudoku Recognizer</a>",
+            "<a target='_blank' href='https://github.com/diegogliarte/sudoku-recognizer'>Sudoku Recognizer</a>",
             "Interprets a video stream to detect a sudoku, build it, and solve it using backtracking",
             ">> Python, OpenCV, Machine Learning, Computer Vision <<",
             "",
